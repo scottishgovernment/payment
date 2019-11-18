@@ -1,0 +1,13 @@
+[Unit]
+Description=payment service
+After=network.target
+
+[Service]
+User=payment
+WorkingDirectory=/opt/payment
+ExecStart=/opt/payment/run
+SyslogIdentifier=payment
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
