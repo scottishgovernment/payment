@@ -1,0 +1,22 @@
+#!/bin/sh
+. /etc/profile
+JAVA=${JAVA_HOME:-/usr}/bin/java
+set -eu
+
+# Find out if its the live host and run the importer
+if [ -x /usr/local/bin/am-i-live ] && ! /usr/local/bin/am-i-live; then
+  exit
+fi
+
+${JAVA} \
+  -XX:+UseSerialGC \
+  -XX:MinHeapFreeRatio=20 \
+  -XX:MaxHeapFreeRatio=40 \
+  -Dlogback.configurationFile=/opt/pressreleases/logback.xml \
+  -jar /opt/pressreleases/pressreleases.jar | \
+  tee /var/log/pressreleases/pressreleases.log | \
+  logger --size 16KB -t press-releases
+
+if [ -n "${pressreleases_log_target-}" ] ; then
+  aws s3 cp /var/log/pressreleases/pressreleases.log "$pressreleases_log_target"
+fi

@@ -1,0 +1,19 @@
+#!/bin/sh
+set -eu
+adduser \
+  --quiet \
+  --system \
+  --home /opt/pressreleases \
+  --no-create-home \
+  --shell /bin/bash \
+  --group \
+  --gecos "Press release importer for gov.scot" \
+  pressreleases
+
+mkdir -p /var/log/pressreleases
+chmod 755 /var/log/pressreleases
+chown pressreleases:nogroup /var/log/pressreleases
+
+systemctl daemon-reload
+systemctl enable pressreleases.timer
+systemctl start pressreleases.timer

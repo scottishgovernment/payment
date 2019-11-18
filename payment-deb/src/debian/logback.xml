@@ -1,0 +1,15 @@
+<configuration>
+
+  <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+  </appender>
+
+  <logger name="scot.mygov" level="INFO"/>
+  <logger name="org" level="INFO"/>
+  <logger name="org.hibernate.validator.internal.util.Version" level="WARN"/>
+
+  <root level="INFO">
+    <appender-ref ref="stdout" />
+  </root>
+
+</configuration>

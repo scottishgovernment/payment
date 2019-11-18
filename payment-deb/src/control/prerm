@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+systemctl stop pressreleases.timer
+systemctl disable pressreleases.timer

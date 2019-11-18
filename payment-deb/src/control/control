@@ -1,0 +1,10 @@
+Package: press-releases
+Version: [[version]]
+Section: mygov
+Priority: optional
+Architecture: all
+Description: Imports press releases for gov.scot from PRgloo api.
+Maintainer: david.sinclair@gov.scot
+Depends: java8-runtime-headless
+Conflicts: pressreleases
+Replaces: pressreleases

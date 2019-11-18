@@ -1,0 +1,8 @@
+[Unit]
+Description=Press releases importer
+
+[Timer]
+OnCalendar=*:0/5
+
+[Install]
+WantedBy=timers.target
