@@ -5,10 +5,7 @@
     <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
   </appender>
 
-  <logger name="scot.mygov.search" level="INFO"/>
-  <logger name="org.hibernate.validator.internal.util.Version" level="WARN"/>
-  <logger name="io" level="INFO"/>
-  <logger name="org" level="INFO"/>
+  <logger name="scot.gov.payment" level="INFO"/>
 
   <root level="INFO">
     <appender-ref ref="log" />
