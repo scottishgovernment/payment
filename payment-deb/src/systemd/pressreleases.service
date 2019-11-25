@@ -1,8 +1,0 @@
-[Unit]
-Description=Press release importer
-
-[Service]
-Type=oneshot
-User=pressreleases
-Group=pressreleases
-ExecStart=/opt/pressreleases/run

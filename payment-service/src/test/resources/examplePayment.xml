@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE paymentService PUBLIC "-//Worldpay//DTD Worldpay PaymentService v1//EN" "http://dtd.worldpay.com/paymentService_v1.dtd">
+<paymentService version="1.4" merchantCode="GBSSCOTTISHGOVCGTEST">
+    <submit>
+        <order orderCode="ORDER2" installationId="1365399">
+            <description>Some description has been entered</description>
+            <amount currencyCode="GBP" exponent="2" value="50" />
+            <orderContent><![CDATA[Blah Blah stuff info]]></orderContent>
+            <paymentMethodMask>
+                <include code="ALL" />
+            </paymentMethodMask>
+            <shopper>
+                <shopperEmailAddress>test.test@mygov.scot</shopperEmailAddress>
+            </shopper>
+        </order>
+    </submit>
+</paymentService>

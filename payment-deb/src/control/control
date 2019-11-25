@@ -1,10 +1,8 @@
-Package: press-releases
+Package: payment
 Version: [[version]]
 Section: mygov
 Priority: optional
 Architecture: all
-Description: Imports press releases for gov.scot from PRgloo api.
-Maintainer: david.sinclair@gov.scot
+Description: Rest service for processing card oayments
+Maintainer: david.sinclairo@gov.scot
 Depends: java8-runtime-headless
-Conflicts: pressreleases
-Replaces: pressreleases
