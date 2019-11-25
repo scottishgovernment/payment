@@ -5,18 +5,28 @@ to the Scottish Government via the gov.scot website
 
 # Configuration
 
-* `worldpay_payment_url`
-    * The url of the prgloo api
-    * Type: URL
-    * Default: https://secure-test.worldpay.com/jsp/merchant/xml/paymentService.jsp
+* `worldpay_url`
+    * Url used to submit payments
+    * Type: Sting
+    * Default: none
 
-* `worldpay_xml_username`
+* `worldpay_username`
     * Username used to authenticate with Worldpay
     * Type: String
     * Default: none
 
-
-* `worldpay_xml_password`
+* `worldpay_password`
     * Password used to authenticate with Worldpay
     * Type: String
     * Default: none
+
+* `worldpay_mechantCode`
+    * Merchant code included in worldpay requests
+    * Type: String
+    * Default: none
+
+* `worldpay_instalationId`
+    * Instalation id included in worldpay requests
+    * Type: String
+    * Default: none
+

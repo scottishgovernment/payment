@@ -6,6 +6,9 @@
   </appender>
 
   <logger name="scot.gov.payment" level="INFO"/>
+  <logger name="org.hibernate.validator.internal.util.Version" level="WARN"/>
+  <logger name="io" level="INFO"/>
+  <logger name="org" level="INFO"/>
 
   <root level="INFO">
     <appender-ref ref="log" />

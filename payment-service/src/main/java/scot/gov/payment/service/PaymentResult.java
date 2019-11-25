@@ -1,8 +1,5 @@
 package scot.gov.payment.service;
 
-/**
- * Created by z418868 on 18/11/2019.
- */
 public class PaymentResult {
 
     private boolean success;
@@ -51,7 +48,18 @@ public class PaymentResult {
         return paymentUrl;
     }
 
-    protected void setPaymentUrl(String paymentUrl) {
+    public void setPaymentUrl(String paymentUrl) {
         this.paymentUrl = paymentUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "PaymentResult{" +
+                "success=" + success +
+                ", error='" + error + '\'' +
+                ", orderCode='" + orderCode + '\'' +
+                ", referenceId='" + referenceId + '\'' +
+                ", paymentUrl='" + paymentUrl + '\'' +
+                '}';
     }
 }

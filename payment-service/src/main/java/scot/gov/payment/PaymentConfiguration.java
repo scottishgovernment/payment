@@ -1,15 +1,15 @@
 package scot.gov.payment;
 
-import javax.ws.rs.core.Response;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * Created by z418868 on 18/11/2019.
  */
 public class PaymentConfiguration {
 
-    private int port = 2020;
+    private int port = 9095;
 
-    private WorldPay worldPay;
+    private Worldpay worldpay = new Worldpay();
 
     public int getPort() {
         return port;
@@ -19,77 +19,28 @@ public class PaymentConfiguration {
         this.port = port;
     }
 
-    public WorldPay getWorldPay() {
-        return worldPay;
+    public void setWorldpay(Worldpay worldpay) {
+        this.worldpay = worldpay;
     }
 
-    public void setWorldPay(WorldPay worldPay) {
-        this.worldPay = worldPay;
+    public Worldpay getWorldpay() {
+        return worldpay;
     }
 
-    public static class ResponseUrls {
-        String successURL;
-
-        String pendingURL;
-
-        String errorUrl;
-
-        String failureURL;
-
-        String cancelUrl;
-
-        public String getSuccessURL() {
-            return successURL;
-        }
-
-        public void setSuccessURL(String successURL) {
-            this.successURL = successURL;
-        }
-
-        public String getPendingURL() {
-            return pendingURL;
-        }
-
-        public void setPendingURL(String pendingURL) {
-            this.pendingURL = pendingURL;
-        }
-
-        public String getErrorUrl() {
-            return errorUrl;
-        }
-
-        public void setErrorUrl(String errorUrl) {
-            this.errorUrl = errorUrl;
-        }
-
-        public String getFailureURL() {
-            return failureURL;
-        }
-
-        public void setFailureURL(String failureURL) {
-            this.failureURL = failureURL;
-        }
-
-        public String getCancelUrl() {
-            return cancelUrl;
-        }
-
-        public void setCancelUrl(String cancelUrl) {
-            this.cancelUrl = cancelUrl;
-        }
-    }
-
-
-    public static class WorldPay {
+    public static class Worldpay {
 
         private String url = "https://secure-test.worldpay.com/jsp/merchant/xml/paymentService.jsp";
 
-        private String merchantCode = "GBSSCOTTISHGOVCGTEST";
+        @NotEmpty
+        private String merchantCode;
 
-        private String instalationId = "1365399";
+        @NotEmpty
+        private String instalationId;
 
-        private String username = "GBSSCOTTISHGOVCGTEST";
+        @NotEmpty
+        private String username;
 
+        @NotEmpty
         private String password;
 
         public String getUrl() {

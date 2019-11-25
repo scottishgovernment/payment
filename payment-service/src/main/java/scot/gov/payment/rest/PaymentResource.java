@@ -1,7 +1,5 @@
 package scot.gov.payment.rest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import scot.gov.payment.PaymentConfiguration;
 import scot.gov.payment.service.*;
 
@@ -10,10 +8,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.apache.commons.lang3.StringUtils.isNoneBlank;
+
+/**
+ * Rest endpoint for processing payments.
+ */
 @Path("payment")
 public class PaymentResource {
-
-    private static final Logger LOG = LoggerFactory.getLogger(PaymentResource.class);
 
     @Inject
     PaymentConfiguration configuration;
@@ -21,27 +22,41 @@ public class PaymentResource {
     @Inject
     PaymentService service;
 
+    @Inject
+    PaymentResourceListener listener;
+
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public Response makePayment(PaymentRequest request) {
+    public Response makePayment(
+            PaymentRequest request,
+            @HeaderParam("x-forwarded-host") String forwardedHost,
+            @HeaderParam("x-forwarded-proto") String forwardedProtocol) {
 
-        PaymentResult result;
-        int status;
+        listener.onPaymentRequest(request);
 
         try {
-            result = service.makePayment(request);
-            status = result.isSuccess() ? 200 : 500;
+            String siteUrl = getSiteUrl(forwardedHost, forwardedProtocol);
+            PaymentResult result = service.makePayment(request, siteUrl);
+
+            listener.onPaymentResult(result);
+            return Response
+                    .status(result.isSuccess() ? 200 : 400)
+                    .entity(result)
+                    .build();
         } catch (PaymentException e) {
-            LOG.error("Failed to process payemnt request payment: {}", request.toString(), e);
-            result = PaymentResultBuilder.error("Failed to make payment").build();
-            status = 500;
+            listener.onPaymentException(request, e);
+            return Response
+                    .status(500)
+                    .entity("Unexpected error processing payment")
+                    .build();
         }
-
-        return Response
-                .status(status)
-                .entity(result)
-                .build();
-
     }
+
+    String getSiteUrl(String forwardedHost, String forwardedProtocol) {
+        return isNoneBlank(forwardedHost, forwardedProtocol)
+            ? String.format("%s://%s/", forwardedProtocol, forwardedHost)
+            : "https://www.gov.scot/";
+    }
+
 }

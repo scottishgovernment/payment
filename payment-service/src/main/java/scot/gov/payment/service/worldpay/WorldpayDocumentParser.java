@@ -7,14 +7,10 @@ import scot.gov.payment.service.PaymentException;
 import scot.gov.payment.service.PaymentResult;
 import scot.gov.payment.service.PaymentResultBuilder;
 
-import javax.inject.Inject;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 
 public class WorldpayDocumentParser {
-    @Inject
-    PaymentUrlFormatter paymentUrlFormatter;
 
     public PaymentResult parseResponse(InputStream inputStream) throws PaymentException {
 
@@ -23,7 +19,7 @@ public class WorldpayDocumentParser {
             Document document = documentBuilder.parse(inputStream);
             return extractResultFromDocument(document);
         } catch (Exception e) {
-            throw new PaymentException("Failed to parse result from woldpay", e);
+            throw new PaymentException("Failed to process result from worldpay", e);
         }
     }
 
@@ -58,14 +54,11 @@ public class WorldpayDocumentParser {
         String referenceId = referenceElement.getAttribute("id");
         String paymentUrl = referenceElement.getTextContent();
 
-        // add the response urls to the end of the payment url that worldpay gave us
-        String paymentUrlWithRepsonseUrls = paymentUrlFormatter.formatPaymentUrl(paymentUrl);
-
         return PaymentResultBuilder
                 .success()
                 .orderCode(orderCode)
                 .referenceId(referenceId)
-                .paymentUrl(paymentUrlWithRepsonseUrls)
+                .paymentUrl(paymentUrl)
                 .build();
     }
 }

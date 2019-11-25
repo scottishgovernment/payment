@@ -3,6 +3,7 @@ package scot.gov.payment.service.worldpay;
 import org.junit.Test;
 import scot.gov.payment.service.PaymentException;
 import scot.gov.payment.service.PaymentResult;
+import scot.gov.payment.service.worldpay.responseurls.PaymentUrlFormatter;
 
 import java.io.InputStream;
 
@@ -13,20 +14,11 @@ import static org.junit.Assert.*;
  */
 public class WorldpayDocumentParserTest {
 
-    /**
-     * canParseSuccessResponse
-     * canParseErrorresponse
-     * parserConfigExceptionWrappedAsExpected
-     * ioExceptionWrappedAsExpected
-     *
-     */
-
     @Test
     public void canParseSuccessResponse() throws Exception {
 
         // ARRANGE
         WorldpayDocumentParser sut = new WorldpayDocumentParser();
-        sut.paymentUrlFormatter = appendingUrlFormatter();
         InputStream in = WorldpayDocumentParserTest.class.getResourceAsStream("/successResponse.xml");
 
         // ACT
@@ -35,7 +27,7 @@ public class WorldpayDocumentParserTest {
         // ASSERT
         assertTrue(result.isSuccess());
         assertNull(result.getError());
-        assertEquals("https://hpp-sandbox.worldpay.com/-postfix",
+        assertEquals("https://hpp-sandbox.worldpay.com/",
                 result.getPaymentUrl());
         assertEquals("ORDER3", result.getOrderCode());
         assertEquals("3157597444", result.getReferenceId());
@@ -46,7 +38,6 @@ public class WorldpayDocumentParserTest {
 
         // ARRANGE
         WorldpayDocumentParser sut = new WorldpayDocumentParser();
-        sut.paymentUrlFormatter = appendingUrlFormatter();
         InputStream in = WorldpayDocumentParserTest.class.getResourceAsStream("/errorResponse.xml");
 
         // ACT
@@ -61,21 +52,12 @@ public class WorldpayDocumentParserTest {
     public void invalidXMLThrowsPaymentException() throws Exception {
         // ARRANGE
         WorldpayDocumentParser sut = new WorldpayDocumentParser();
-        sut.paymentUrlFormatter = appendingUrlFormatter();
         InputStream in = WorldpayDocumentParserTest.class.getResourceAsStream("/truncatedResponse.xml");
 
         // ACT
         PaymentResult result = sut.parseResponse(in);
 
         // ASSERT -- see expected exception
-    }
-
-    PaymentUrlFormatter appendingUrlFormatter() {
-        return new PaymentUrlFormatter() {
-            String formatPaymentUrl(String baseUrl) {
-                return baseUrl + "-postfix";
-            }
-        };
     }
 
 }
