@@ -9,7 +9,7 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static org.apache.commons.lang3.StringUtils.isNoneBlank;
+import static net.logstash.logback.encoder.org.apache.commons.lang.StringUtils.isBlank;
 
 /**
  * Rest endpoint for processing payments.
@@ -59,9 +59,10 @@ public class PaymentResource {
     }
 
     String getSiteUrl(String forwardedHost, String forwardedProtocol) {
-        return isNoneBlank(forwardedHost, forwardedProtocol)
-                ? String.format("%s://%s/", forwardedProtocol, forwardedHost)
-                : "https://www.gov.scot/";
+        if (isBlank(forwardedHost) || isBlank(forwardedProtocol)) {
+            return "https://www.gov.scot/";
+        }
+        return String.format("%s://%s/", forwardedProtocol, forwardedHost);
     }
 
     Response toRespone(PaymentRequest request, PaymentResult result) {

@@ -4,6 +4,7 @@ import org.junit.Test;
 import scot.gov.payment.service.PaymentException;
 import scot.gov.payment.service.PaymentRequest;
 import scot.gov.payment.service.PaymentResult;
+import scot.gov.payment.service.PaymentResultBuilder;
 import scot.gov.payment.service.worldpay.responseurls.PaymentUrlFormatter;
 
 import javax.ws.rs.client.Invocation;
@@ -31,7 +32,7 @@ public class WorldpayPaymentServiceTest {
         // ARRANGE
         WorldpayPaymentService sut = new WorldpayPaymentService();
         PaymentRequest paymentRequest = new PaymentRequest();
-        PaymentResult paymentResult = new PaymentResult();
+        PaymentResult paymentResult = PaymentResultBuilder.success().build();
         sut.target = targetWithResponse(200, xmlFixture("/successResponse.xml"));
         sut.worldpayDocumentParser = mock(WorldpayDocumentParser.class);
         sut.worldpayDocumentBuilder = mock(WorldpayDocumentBuilder.class);
@@ -43,28 +44,6 @@ public class WorldpayPaymentServiceTest {
 
         // ASSERT
         assertSame(paymentResult, actual);
-    }
-
-    @Test
-    public void unsuccessfulResponseFromWorldHandledCorrectly() throws Exception {
-//        // ARRANGE
-//        WorldpayPaymentService sut = new WorldpayPaymentService();
-//        PaymentRequest paymentRequest = new PaymentRequest();
-//        PaymentResult paymentResult = new PaymentResult();
-//
-//        sut.target = targetWithResponse(200, xmlFixture("/unsuccessfulResponse.xml"));
-//        sut.worldpayDocumentParser = mock(WorldpayDocumentParser.class);
-//        sut.worldpayDocumentBuilder = mock(WorldpayDocumentBuilder.class);
-//        sut.paymentUrlFormatter = appendingUrlFormatter();
-//        when(sut.worldpayDocumentParser.parseResponse(any())).thenReturn(paymentResult);
-//
-//        // ACT
-//        PaymentResult actual = sut.makePayment(paymentRequest, siteUrl);
-//
-//        // ASSERT
-//        assertSame(paymentResult, actual);
-
-        // TODO: make a better test that acually moocj the web target
     }
 
     @Test

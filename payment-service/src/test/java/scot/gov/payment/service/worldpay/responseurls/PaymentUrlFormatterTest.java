@@ -1,6 +1,6 @@
 package scot.gov.payment.service.worldpay.responseurls;
 
-import org.apache.commons.lang3.StringUtils;
+import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toMap;
+import static net.logstash.logback.encoder.org.apache.commons.lang.StringUtils.startsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -29,7 +30,7 @@ public class PaymentUrlFormatterTest {
 
         // ASSERT
         // the url starts with the paymenturl.
-        assertTrue(StringUtils.startsWith(actual, paymentUrl));
+        assertTrue(startsWith(actual, paymentUrl));
         Map<String, String> params = params(actual);
         assertHasExpectedResultUrlParam(params, "successURL",
                 "https://www.gov.scot/payment-result/authorised/?param=orderCode1");
