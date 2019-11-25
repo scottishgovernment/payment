@@ -53,7 +53,7 @@ public class MetricCollectingResourceListener implements PaymentResourceListener
     }
 
     @Override
-    public void onPaymentResult(PaymentResult result) {
+    public void onPaymentResult(PaymentRequest request, PaymentResult result) {
         if (!result.isSuccess()) {
             errorCounter.inc();
             errorMeter.mark();

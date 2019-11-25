@@ -22,7 +22,10 @@
     <jackson.version>2.6.1</jackson.version>
     <slf4j.version>1.7.29</slf4j.version>
     <logback.version>1.2.3</logback.version>
-    <sonar.exclusions>target/**</sonar.exclusions>
+    <sonar.exclusions>
+      target/**,
+      src/main/java/scot/gov/payment/rest/listeners/LoggingResourceListener.java
+    </sonar.exclusions>
   </properties>
 
   <dependencies>

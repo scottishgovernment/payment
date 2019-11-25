@@ -14,7 +14,7 @@ import java.util.Map;
 import static scot.gov.payment.rest.listeners.MetricName.EXCEPTION_RATE;
 
 /**
- * Healthcheck endpoint fo the payment rest service.
+ * Healthcheck endpoint for the payment rest service.
  *
  * Logic is based on metrics collected by the PaymentResource class.  If there have been errors in the last 5
  * minutes then the service will be unhealthy.

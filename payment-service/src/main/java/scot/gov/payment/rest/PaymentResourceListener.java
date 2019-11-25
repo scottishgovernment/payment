@@ -11,7 +11,7 @@ public interface PaymentResourceListener {
 
     void onPaymentRequest(PaymentRequest request);
 
-    void onPaymentResult(PaymentResult result);
+    void onPaymentResult(PaymentRequest request, PaymentResult result);
 
     void onPaymentException(PaymentRequest request, PaymentException exception);
 }

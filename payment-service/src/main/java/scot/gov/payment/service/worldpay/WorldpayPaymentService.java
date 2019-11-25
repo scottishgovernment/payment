@@ -47,7 +47,7 @@ public class WorldpayPaymentService implements PaymentService {
 
     Entity<String> paymentEntity(PaymentRequest request) throws PaymentException {
         try {
-            String worldpayPaymentDocument = worldpayDocumentBuilder.buildPaymentDocuemnt(request);
+            String worldpayPaymentDocument = worldpayDocumentBuilder.buildPaymentDocument(request);
             return Entity.entity(worldpayPaymentDocument, MediaType.APPLICATION_XML_TYPE);
         } catch (Exception e) {
             throw new PaymentException("Unable to format xml", e);
@@ -63,14 +63,18 @@ public class WorldpayPaymentService implements PaymentService {
         InputStream inputStream = (InputStream) response.getEntity();
         PaymentResult result = worldpayDocumentParser.parseResponse(inputStream);
 
-        // add the response urls to the end of the payment url that worldpay gave us
-        String paymentUrlWithResponseUrls =
-                paymentUrlFormatter.formatPaymentUrl(
-                    result.getPaymentUrl(),
-                    result.getOrderCode(),
-                    siteUrl);
-        result.setPaymentUrl(paymentUrlWithResponseUrls);
+        if (result.isSuccess()) {
+            // add the response urls to the end of the payment url that worldpay gave us
+            String paymentUrlWithResponseUrls =
+                    paymentUrlFormatter.formatPaymentUrl(
+                            result.getPaymentUrl(),
+                            result.getOrderCode(),
+                            siteUrl);
+            result.setPaymentUrl(paymentUrlWithResponseUrls);
+        }
         return result;
     }
+
+
 
 }

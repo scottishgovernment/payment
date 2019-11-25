@@ -22,8 +22,8 @@ public class CompoundResourceListener implements PaymentResourceListener {
     }
 
     @Override
-    public void onPaymentResult(PaymentResult result) {
-        listeners.stream().forEach(l -> l.onPaymentResult(result));
+    public void onPaymentResult(PaymentRequest request, PaymentResult result) {
+        listeners.stream().forEach(l -> l.onPaymentResult(request, result));
     }
 
     @Override

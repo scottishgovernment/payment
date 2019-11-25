@@ -1,5 +1,6 @@
 package scot.gov.payment.rest;
 
+import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -46,6 +47,7 @@ public class RequestLogger implements ContainerRequestFilter, ContainerResponseF
     @Override
     public void filter(ContainerRequestContext context, ContainerResponseContext response)
             throws IOException {
+
         Instant start = (Instant) context.getProperty(START_PROPERTY);
         Instant end = Instant.now();
 

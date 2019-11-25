@@ -1,9 +1,6 @@
 package scot.gov.payment.service.worldpay;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 import scot.gov.payment.service.PaymentException;
 import scot.gov.payment.service.PaymentRequest;
 import scot.gov.payment.service.PaymentResult;
@@ -49,6 +46,28 @@ public class WorldpayPaymentServiceTest {
     }
 
     @Test
+    public void unsuccessfulResponseFromWorldHandledCorrectly() throws Exception {
+//        // ARRANGE
+//        WorldpayPaymentService sut = new WorldpayPaymentService();
+//        PaymentRequest paymentRequest = new PaymentRequest();
+//        PaymentResult paymentResult = new PaymentResult();
+//
+//        sut.target = targetWithResponse(200, xmlFixture("/unsuccessfulResponse.xml"));
+//        sut.worldpayDocumentParser = mock(WorldpayDocumentParser.class);
+//        sut.worldpayDocumentBuilder = mock(WorldpayDocumentBuilder.class);
+//        sut.paymentUrlFormatter = appendingUrlFormatter();
+//        when(sut.worldpayDocumentParser.parseResponse(any())).thenReturn(paymentResult);
+//
+//        // ACT
+//        PaymentResult actual = sut.makePayment(paymentRequest, siteUrl);
+//
+//        // ASSERT
+//        assertSame(paymentResult, actual);
+
+        // TODO: make a better test that acually moocj the web target
+    }
+
+    @Test
     public void errorResponseFromWorldHandledCorrectly() throws Exception {
         // ARRANGE
         WorldpayPaymentService sut = new WorldpayPaymentService();
@@ -89,7 +108,7 @@ public class WorldpayPaymentServiceTest {
         sut.target = targetWithResponse(200, xmlFixture("/successResponse.xml"));
         sut.worldpayDocumentParser = mock(WorldpayDocumentParser.class);
         sut.worldpayDocumentBuilder = mock(WorldpayDocumentBuilder.class);
-        when(sut.worldpayDocumentBuilder.buildPaymentDocuemnt(any())).thenThrow(new RuntimeException("arg"));
+        when(sut.worldpayDocumentBuilder.buildPaymentDocument(any())).thenThrow(new RuntimeException("arg"));
         when(sut.worldpayDocumentParser.parseResponse(any())).thenReturn(paymentResult);
 
         // ACT
