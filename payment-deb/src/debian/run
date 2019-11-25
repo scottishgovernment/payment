@@ -1,4 +1,8 @@
-#!/bin/sh -l
+#!/bin/sh
+. /etc/profile
+JAVA=${JAVA_HOME:-/usr}/bin/java
+set -eu
+
 exec java \
   -Dlogback.configurationFile=/opt/payment/logback.xml \
   -jar /opt/payment/payment.jar

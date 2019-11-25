@@ -3,6 +3,6 @@ Version: [[version]]
 Section: mygov
 Priority: optional
 Architecture: all
-Description: Rest service for processing card oayments
-Maintainer: david.sinclairo@gov.scot
+Description: Processes card payments
+Maintainer: david.sinclair@gov.scot
 Depends: java8-runtime-headless
