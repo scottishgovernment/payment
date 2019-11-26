@@ -1,11 +1,13 @@
 package scot.gov.payment;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
 public class PaymentConfiguration {
 
     private int port = 9095;
 
+    @Valid
     private Worldpay worldpay = new Worldpay();
 
     public int getPort() {
