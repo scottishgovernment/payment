@@ -2,9 +2,6 @@ package scot.gov.payment;
 
 import javax.validation.constraints.NotEmpty;
 
-/**
- * Created by z418868 on 18/11/2019.
- */
 public class PaymentConfiguration {
 
     private int port = 9095;

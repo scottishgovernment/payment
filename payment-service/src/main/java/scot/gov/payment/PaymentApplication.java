@@ -11,10 +11,6 @@ import java.util.Set;
 
 import static java.util.Arrays.asList;
 
-/**
- * Hello world!
- *
- */
 public class PaymentApplication extends Application {
 
     @Inject

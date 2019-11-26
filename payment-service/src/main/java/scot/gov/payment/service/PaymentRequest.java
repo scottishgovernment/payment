@@ -1,8 +1,5 @@
 package scot.gov.payment.service;
 
-/**
- * Created by z418868 on 18/11/2019.
- */
 public class PaymentRequest {
 
     private String orderCode;
