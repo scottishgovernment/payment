@@ -9,6 +9,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.Duration;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 import static net.logstash.logback.argument.StructuredArguments.entries;
 
+@PreMatching
 public class RequestLogger implements ContainerRequestFilter, ContainerResponseFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestLogger.class);
@@ -61,7 +63,7 @@ public class RequestLogger implements ContainerRequestFilter, ContainerResponseF
         String method = context.getRequest().getMethod();
         String path = context.getUriInfo().getPath();
         int status = response.getStatus();
-        LOGGER.info("{} {} {} {}",
+        LOGGER.info("{} {} {}",
                 status,
                 method,
                 path,

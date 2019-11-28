@@ -13,7 +13,7 @@ import static net.logstash.logback.encoder.org.apache.commons.lang.StringUtils.i
 /**
  * Rest endpoint for processing payments.
  */
-@Path("payment")
+@Path("service/payment")
 public class PaymentResource {
 
     @Inject
