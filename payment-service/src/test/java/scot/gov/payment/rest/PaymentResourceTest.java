@@ -20,19 +20,22 @@ import static org.mockito.Mockito.*;
 public class PaymentResourceTest {
 
     @Test
-    public void sucessfulPaymentRedirectsToPaymentUrl() throws PaymentException{
+    public void sucessfullPaymentReturns200Response() throws PaymentException{
         // ARRANGE
         PaymentResource sut = new PaymentResource();
         sut.listener = new CompoundResourceListener();
+        PaymentRequest request = anyRequest();
         PaymentResult result = sucess();
         sut.service = serviceWithResponse(result);
 
         // ACT
-        Response response = sut.makePayment("order", "description", "100", "www.gov2.scot", "http");
+        Response response = sut.makePayment(request, "www.gov2.scot", "http");
 
         // ASSERT
-        assertEquals(301, response.getStatus());
-        assertSame(response.getHeaderString("Location"), result.getPaymentUrl());
+        assertEquals(200, response.getStatus());
+        assertSame(response.getEntity(), result);
+        // make sure that it use the url derived from the request headers
+        verify(sut.service).makePayment(request, "http://www.gov2.scot/");
     }
 
     @Test
@@ -40,15 +43,18 @@ public class PaymentResourceTest {
         // ARRANGE
         PaymentResource sut = new PaymentResource();
         sut.listener = new CompoundResourceListener();
+        PaymentRequest request = anyRequest();
         PaymentResult result = sucess();
         sut.service = serviceWithResponse(result);
 
         // ACT
-        Response response = sut.makePayment("order", "description", "100", null, null);
+        Response response = sut.makePayment(request, null, null);
 
         // ASSERT
-        assertEquals(301, response.getStatus());
-        verify(sut.service).makePayment(any(PaymentRequest.class), Mockito.startsWith("https://www.gov.scot"));
+        assertEquals(200, response.getStatus());
+        assertSame(response.getEntity(), result);
+        // uses a sensible default if the forwarding headers are not included
+        verify(sut.service).makePayment(request, "https://www.gov.scot/");
     }
 
 
@@ -57,14 +63,16 @@ public class PaymentResourceTest {
         // ARRANGE
         PaymentResource sut = new PaymentResource();
         sut.listener = new CompoundResourceListener();
+        PaymentRequest request = anyRequest();
         PaymentResult result = fail();
         sut.service = serviceWithResponse(result);
 
         // ACT
-        Response response = sut.makePayment("order", "description", "100", "www.gov.scot", "https");
+        Response response = sut.makePayment(request, "www.gov.scot", "https");
 
         // ASSERT
         assertEquals(400, response.getStatus());
+        assertSame(response.getEntity(), result);
     }
 
     @Test
@@ -74,9 +82,10 @@ public class PaymentResourceTest {
         PaymentResource sut = new PaymentResource();
         sut.listener = new CompoundResourceListener();
         sut.service = exceptionThrowingService();
+        PaymentRequest request = anyRequest();
 
         // ACT
-        Response response = sut.makePayment("order", "description", "100", "www.gov.scot", "https");
+        Response response = sut.makePayment(request, "www.gov.scot", "https");
 
         // ASSERT
         assertEquals(500, response.getStatus());
@@ -100,5 +109,9 @@ public class PaymentResourceTest {
         PaymentService service = mock(PaymentService.class);
         when(service.makePayment(any(), any())).thenThrow(new PaymentException("fail"));
         return service;
+    }
+
+    PaymentRequest anyRequest() {
+        return mock(PaymentRequest.class);
     }
 }
