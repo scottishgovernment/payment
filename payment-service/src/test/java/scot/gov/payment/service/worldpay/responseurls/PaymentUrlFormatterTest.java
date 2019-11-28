@@ -33,19 +33,19 @@ public class PaymentUrlFormatterTest {
         assertTrue(startsWith(actual, paymentUrl));
         Map<String, String> params = params(actual);
         assertHasExpectedResultUrlParam(params, "successURL",
-                "https://www.gov.scot/payment-result/authorised/?param=orderCode1");
+                "https://www.gov.scot/payment-result/authorised/?orderCode=orderCode1");
 
         assertHasExpectedResultUrlParam(params, "pendingURL",
-                "https://www.gov.scot/payment-result/shopper_redirected/?param=orderCode1");
+                "https://www.gov.scot/payment-result/shopper_redirected/?orderCode=orderCode1");
 
         assertHasExpectedResultUrlParam(params, "failureURL",
-                "https://www.gov.scot/payment-result/refused/?param=orderCode1");
+                "https://www.gov.scot/payment-result/refused/?orderCode=orderCode1");
 
         assertHasExpectedResultUrlParam(params, "cancelURL",
-                "https://www.gov.scot/payment-result/cancelled/?param=orderCode1");
+                "https://www.gov.scot/payment-result/cancelled/?orderCode=orderCode1");
 
         assertHasExpectedResultUrlParam(params, "errorURL",
-                "https://www.gov.scot/payment-result/error/?param=orderCode1");
+                "https://www.gov.scot/payment-result/error/?orderCode=orderCode1");
     }
 
     Map<String, String> params(String url) {

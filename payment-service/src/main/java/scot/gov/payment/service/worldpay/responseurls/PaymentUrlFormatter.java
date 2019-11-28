@@ -39,7 +39,7 @@ public class PaymentUrlFormatter {
         return new StringBuilder(siteUrl)
                 .append("payment-result/")
                 .append(type.name().toLowerCase()).append("/")
-                .append("?param=")
+                .append("?orderCode=")
                 .append(orderCode)
                 .toString();
     }
