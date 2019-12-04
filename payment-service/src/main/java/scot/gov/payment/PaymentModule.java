@@ -23,6 +23,8 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.UriBuilder;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 @Module(injects = Payment.class)
 public class PaymentModule {
 
@@ -49,7 +51,12 @@ public class PaymentModule {
     @Provides
     @Singleton
     Client client(PaymentConfiguration config) {
-        ResteasyClientBuilder builder = (ResteasyClientBuilder) ResteasyClientBuilder.newBuilder();
+        int connectTimeout = config.getWorldpay().getConnectTimeoutSeconds();
+        int readTimeout = config.getWorldpay().getReadTimeoutSeconds();
+        ResteasyClientBuilder builder =
+                (ResteasyClientBuilder) ResteasyClientBuilder.newBuilder()
+                    .connectTimeout(connectTimeout, SECONDS)
+                    .readTimeout(readTimeout, SECONDS);
         Client client = builder.connectionPoolSize(10).build();
         String username = config.getWorldpay().getUsername();
         String password = config.getWorldpay().getPassword();

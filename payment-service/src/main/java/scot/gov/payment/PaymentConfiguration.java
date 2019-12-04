@@ -42,6 +42,10 @@ public class PaymentConfiguration {
         @NotEmpty
         private String password;
 
+        int connectTimeoutSeconds = 1;
+
+        int readTimeoutSeconds = 10;
+
         public String getUrl() {
             return url;
         }
@@ -80,6 +84,22 @@ public class PaymentConfiguration {
 
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        public int getConnectTimeoutSeconds() {
+            return connectTimeoutSeconds;
+        }
+
+        public void setConnectTimeoutSeconds(int connectTimeoutSeconds) {
+            this.connectTimeoutSeconds = connectTimeoutSeconds;
+        }
+
+        public int getReadTimeoutSeconds() {
+            return readTimeoutSeconds;
+        }
+
+        public void setReadTimeoutSeconds(int readTimeoutSeconds) {
+            this.readTimeoutSeconds = readTimeoutSeconds;
         }
     }
 }
