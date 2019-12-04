@@ -1,6 +1,5 @@
 package scot.gov.payment.service.worldpay.responseurls;
 
-import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -33,19 +32,19 @@ public class PaymentUrlFormatterTest {
         assertTrue(startsWith(actual, paymentUrl));
         Map<String, String> params = params(actual);
         assertHasExpectedResultUrlParam(params, "successURL",
-                "https://www.gov.scot/payment-result/authorised/?orderCode=orderCode1");
+                "https://www.gov.scot/payment/authorised/?orderCode=orderCode1");
 
         assertHasExpectedResultUrlParam(params, "pendingURL",
-                "https://www.gov.scot/payment-result/shopper_redirected/?orderCode=orderCode1");
+                "https://www.gov.scot/payment/redirected/?orderCode=orderCode1");
 
         assertHasExpectedResultUrlParam(params, "failureURL",
-                "https://www.gov.scot/payment-result/refused/?orderCode=orderCode1");
+                "https://www.gov.scot/payment/refused/?orderCode=orderCode1");
 
         assertHasExpectedResultUrlParam(params, "cancelURL",
-                "https://www.gov.scot/payment-result/cancelled/?orderCode=orderCode1");
+                "https://www.gov.scot/payment/cancelled/?orderCode=orderCode1");
 
         assertHasExpectedResultUrlParam(params, "errorURL",
-                "https://www.gov.scot/payment-result/error/?orderCode=orderCode1");
+                "https://www.gov.scot/payment/error/?orderCode=orderCode1");
     }
 
     Map<String, String> params(String url) {

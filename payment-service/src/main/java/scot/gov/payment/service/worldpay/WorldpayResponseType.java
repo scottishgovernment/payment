@@ -3,7 +3,7 @@ package scot.gov.payment.service.worldpay;
 public enum WorldpayResponseType {
 
     AUTHORISED("successURL"),
-    SHOPPER_REDIRECTED("pendingURL"),
+    REDIRECTED("pendingURL"),
     REFUSED("failureURL"),
     CANCELLED("cancelURL"),
     ERROR("errorURL");

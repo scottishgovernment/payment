@@ -37,7 +37,7 @@ public class PaymentUrlFormatter {
 
     String responseUrl(WorldpayResponseType type, String orderCode, String siteUrl) {
         return new StringBuilder(siteUrl)
-                .append("payment-result/")
+                .append("payment/")
                 .append(type.name().toLowerCase()).append("/")
                 .append("?orderCode=")
                 .append(orderCode)
