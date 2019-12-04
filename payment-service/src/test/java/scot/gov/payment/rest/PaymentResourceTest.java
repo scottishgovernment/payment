@@ -1,103 +1,131 @@
 package scot.gov.payment.rest;
 
-import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.junit.MockitoJUnitRunner;
 import scot.gov.payment.rest.listeners.CompoundResourceListener;
 import scot.gov.payment.service.*;
 
+import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.core.Response;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * Created by z418868 on 20/11/2019.
- */
 public class PaymentResourceTest {
 
     @Test
-    public void sucessfullPaymentReturns200Response() throws PaymentException{
-        // ARRANGE
+    public void successfulPaymentReturns200Response() throws Exception {
+
         PaymentResource sut = new PaymentResource();
+        PaymentResult result = success();
+        CapturingPaymentService service = new CapturingPaymentService(result);
+        sut.service = service;
         sut.listener = new CompoundResourceListener();
-        PaymentRequest request = anyRequest();
-        PaymentResult result = sucess();
-        sut.service = serviceWithResponse(result);
+        ArgumentCaptor<Response> response = ArgumentCaptor.forClass(Response.class);
+        AsyncResponse asyncResponse = mock(AsyncResponse.class);
+        when(asyncResponse.resume(response.capture())).thenReturn(true);
 
         // ACT
-        Response response = sut.makePayment(request, "www.gov2.scot", "http");
+        sut.makePayment(anyRequest(), "www2.gov.scot", "https", asyncResponse);
 
         // ASSERT
-        assertEquals(200, response.getStatus());
-        assertSame(response.getEntity(), result);
-        // make sure that it use the url derived from the request headers
-        verify(sut.service).makePayment(request, "http://www.gov2.scot/");
+        Response value = response.getValue();
+        assertEquals(200, value.getStatus());
+        assertSame(value.getEntity(), result);
+        assertEquals("https://www2.gov.scot/", service.siteUrl);
     }
 
     @Test
-    public void usesDefaultSiteUrlIfRequestHeadersNull() throws PaymentException{
-        // ARRANGE
+    public void usesDefaultSiteUrlIfHosrtHeaderIsNull() throws PaymentException{
         PaymentResource sut = new PaymentResource();
+        PaymentResult result = success();
+        CapturingPaymentService service = new CapturingPaymentService(result);
+        sut.service = service;
         sut.listener = new CompoundResourceListener();
-        PaymentRequest request = anyRequest();
-        PaymentResult result = sucess();
-        sut.service = serviceWithResponse(result);
+        ArgumentCaptor<Response> response = ArgumentCaptor.forClass(Response.class);
+        AsyncResponse asyncResponse = mock(AsyncResponse.class);
+        when(asyncResponse.resume(response.capture())).thenReturn(true);
 
         // ACT
-        Response response = sut.makePayment(request, null, null);
+        sut.makePayment(anyRequest(), null, "https", asyncResponse);
 
         // ASSERT
-        assertEquals(200, response.getStatus());
-        assertSame(response.getEntity(), result);
-        // uses a sensible default if the forwarding headers are not included
-        verify(sut.service).makePayment(request, "https://www.gov.scot/");
+        Response value = response.getValue();
+        assertEquals(200, value.getStatus());
+        assertSame(value.getEntity(), result);
+        assertEquals("https://www.gov.scot/", service.siteUrl);
     }
+
+    @Test
+    public void usesDefaultSiteUrlIfProtoHeaderIsNull() throws PaymentException{
+        PaymentResource sut = new PaymentResource();
+        PaymentResult result = success();
+        CapturingPaymentService service = new CapturingPaymentService(result);
+        sut.service = service;
+        sut.listener = new CompoundResourceListener();
+        ArgumentCaptor<Response> response = ArgumentCaptor.forClass(Response.class);
+        AsyncResponse asyncResponse = mock(AsyncResponse.class);
+        when(asyncResponse.resume(response.capture())).thenReturn(true);
+
+        // ACT
+        sut.makePayment(anyRequest(), "wwww.gov.scot", null, asyncResponse);
+
+        // ASSERT
+        Response value = response.getValue();
+        assertEquals(200, value.getStatus());
+        assertSame(value.getEntity(), result);
+        assertEquals("https://www.gov.scot/", service.siteUrl);
+    }
+
 
 
     @Test
     public void unsucessfullPaymentReturns400Response() throws PaymentException{
         // ARRANGE
         PaymentResource sut = new PaymentResource();
-        sut.listener = new CompoundResourceListener();
-        PaymentRequest request = anyRequest();
         PaymentResult result = fail();
-        sut.service = serviceWithResponse(result);
+        CapturingPaymentService service = new CapturingPaymentService(result);
+        sut.service = service;
+        sut.listener = new CompoundResourceListener();
+        ArgumentCaptor<Response> response = ArgumentCaptor.forClass(Response.class);
+        AsyncResponse asyncResponse = mock(AsyncResponse.class);
+        when(asyncResponse.resume(response.capture())).thenReturn(true);
 
         // ACT
-        Response response = sut.makePayment(request, "www.gov.scot", "https");
+        sut.makePayment(anyRequest(), "wwww.gov.scot", null, asyncResponse);
 
         // ASSERT
-        assertEquals(400, response.getStatus());
-        assertSame(response.getEntity(), result);
+        Response value = response.getValue();
+        assertEquals(400, value.getStatus());
+        assertSame(value.getEntity(), result);
+        assertEquals("https://www.gov.scot/", service.siteUrl);
+
     }
 
     @Test
     public void paymentExceptionReturns500Response() throws PaymentException {
-
         // ARRANGE
         PaymentResource sut = new PaymentResource();
+        PaymentException exception = new PaymentException("arg");
+        ExceptionPaymentService service = new ExceptionPaymentService(exception);
+        sut.service = service;
         sut.listener = new CompoundResourceListener();
-        sut.service = exceptionThrowingService();
-        PaymentRequest request = anyRequest();
+        ArgumentCaptor<Response> response = ArgumentCaptor.forClass(Response.class);
+        AsyncResponse asyncResponse = mock(AsyncResponse.class);
+        when(asyncResponse.resume(response.capture())).thenReturn(true);
 
         // ACT
-        Response response = sut.makePayment(request, "www.gov.scot", "https");
+        sut.makePayment(anyRequest(), "wwww.gov.scot", null, asyncResponse);
 
         // ASSERT
-        assertEquals(500, response.getStatus());
+        Response value = response.getValue();
+        assertEquals(500, value.getStatus());
     }
 
-    PaymentService serviceWithResponse(PaymentResult result) throws PaymentException {
-        PaymentService service = mock(PaymentService.class);
-        when(service.makePayment(any(), any())).thenReturn(result);
-        return service;
-    }
-
-    PaymentResult sucess() {
+    PaymentResult success() {
         return PaymentResultBuilder.success().build();
     }
 
@@ -105,13 +133,39 @@ public class PaymentResourceTest {
         return PaymentResultBuilder.error("fail").build();
     }
 
-    PaymentService exceptionThrowingService() throws PaymentException {
-        PaymentService service = mock(PaymentService.class);
-        when(service.makePayment(any(), any())).thenThrow(new PaymentException("fail"));
-        return service;
-    }
-
     PaymentRequest anyRequest() {
         return mock(PaymentRequest.class);
     }
+
+    class CapturingPaymentService implements PaymentService {
+
+        PaymentResult result;
+
+        String siteUrl;
+
+        CapturingPaymentService(PaymentResult result) {
+            this.result = result;
+        }
+
+        @Override
+        public void makePayment(PaymentRequest request, String siteUrl, PaymentCallback callback) {
+            this.siteUrl = siteUrl;
+            callback.onPaymentResult(request, result);
+        }
+    }
+
+    class ExceptionPaymentService implements PaymentService {
+
+        PaymentException exception;
+
+        ExceptionPaymentService(PaymentException exception) {
+            this.exception = exception;
+        }
+
+        @Override
+        public void makePayment(PaymentRequest request, String siteUrl, PaymentCallback callback) {
+            callback.onPaymentException(request, exception);
+        }
+    }
+
 }

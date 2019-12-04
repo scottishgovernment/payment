@@ -46,13 +46,13 @@ public class LoggingResourceListener implements PaymentResourceListener {
         } else {
             event.put(ERROR, result.getError());
         }
-        LOG.info("makePayment result {}", entries(event) );
+        LOG.info("makePayment {} result {}", request.getOrderCode(), entries(event) );
     }
 
     @Override
     public void onPaymentException(PaymentRequest request, PaymentException exception) {
         Map<String, String> event = new HashMap<>();
         event.put(ORDER_CODE, request.getOrderCode());
-        LOG.error("makePayment exception {}", entries(event), exception);
+        LOG.error("makePayment {} exception {}", request.getOrderCode(), entries(event), exception);
     }
 }

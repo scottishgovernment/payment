@@ -1,125 +1,153 @@
 package scot.gov.payment.service.worldpay;
 
 import org.junit.Test;
-import scot.gov.payment.service.PaymentException;
-import scot.gov.payment.service.PaymentRequest;
-import scot.gov.payment.service.PaymentResult;
-import scot.gov.payment.service.PaymentResultBuilder;
+import scot.gov.payment.service.*;
 import scot.gov.payment.service.worldpay.responseurls.PaymentUrlFormatter;
 
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.Response;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by z418868 on 20/11/2019.
- */
 public class WorldpayPaymentServiceTest {
 
     String siteUrl = "https://www.gov.scot/";
+
+    @Test
+    public void documentBuilderExceptionWrappedAsExpected() throws Exception {
+        // ARRANGE
+        WorldpayPaymentService sut = new WorldpayPaymentService();
+        PaymentRequest paymentRequest = new PaymentRequest();
+        sut.worldpayDocumentBuilder = mock(WorldpayDocumentBuilder.class);
+        when(sut.worldpayDocumentBuilder.buildPaymentDocument(any())).thenThrow(new RuntimeException("arg"));
+
+        // ACT
+        sut.makePayment(paymentRequest, siteUrl, new PaymentCallback() {
+            @Override
+            public void onPaymentResult(PaymentRequest request, PaymentResult result) {
+                fail("expected an exception");
+            }
+
+            @Override
+            public void onPaymentException(PaymentRequest request, PaymentException exception) {
+                assertNotNull(exception);
+            }
+        });
+    }
 
     @Test
     public void successResponseFromWorldHandledCorrectly() throws Exception {
         // ARRANGE
         WorldpayPaymentService sut = new WorldpayPaymentService();
         PaymentRequest paymentRequest = new PaymentRequest();
+        Response response = response(200, xmlFixture("/successResponse.xml"));
+        sut.worldpayDocumentParser = new WorldpayDocumentParser();
+        sut.worldpayDocumentBuilder = mock(WorldpayDocumentBuilder.class);
+        sut.paymentUrlFormatter = appendingUrlFormatter();
+
+        // ACT
+        sut.handleResponse(paymentRequest, siteUrl, response, new PaymentCallback() {
+            @Override
+            public void onPaymentResult(PaymentRequest request, PaymentResult result) {
+                assertTrue(result.isSuccess());
+            }
+
+            @Override
+            public void onPaymentException(PaymentRequest request, PaymentException exception) {
+                fail("did not expect an exception");
+            }
+        });
+    }
+
+    @Test
+    public void duplicateOrderResponseFromWorldHandledCorrectly() throws Exception {
+        // ARRANGE
+        WorldpayPaymentService sut = new WorldpayPaymentService();
+        PaymentRequest paymentRequest = new PaymentRequest();
+        Response response = response(200, xmlFixture("/errorResponse.xml"));
+        sut.worldpayDocumentParser = new WorldpayDocumentParser();
+        sut.worldpayDocumentBuilder = mock(WorldpayDocumentBuilder.class);
+        sut.paymentUrlFormatter = appendingUrlFormatter();
+
+        // ACT
+        sut.handleResponse(paymentRequest, siteUrl, response, new PaymentCallback() {
+            @Override
+            public void onPaymentResult(PaymentRequest request, PaymentResult result) {
+                assertFalse(result.isSuccess());
+            }
+
+            @Override
+            public void onPaymentException(PaymentRequest request, PaymentException exception) {
+                fail("did not expect an exception");
+            }
+        });
+    }
+
+    @Test
+    public void serverErrorResponseFromWorldHandledCorrectly() throws Exception {
+        // ARRANGE
+        WorldpayPaymentService sut = new WorldpayPaymentService();
+        PaymentRequest paymentRequest = new PaymentRequest();
         PaymentResult paymentResult = PaymentResultBuilder.success().build();
-        sut.target = targetWithResponse(200, xmlFixture("/successResponse.xml"));
+        Response response = response(500, xmlFixture("/successResponse.xml"));
         sut.worldpayDocumentParser = mock(WorldpayDocumentParser.class);
         sut.worldpayDocumentBuilder = mock(WorldpayDocumentBuilder.class);
         sut.paymentUrlFormatter = appendingUrlFormatter();
         when(sut.worldpayDocumentParser.parseResponse(any())).thenReturn(paymentResult);
 
         // ACT
-        PaymentResult actual = sut.makePayment(paymentRequest, siteUrl);
+        sut.handleResponse(paymentRequest, siteUrl, response, new PaymentCallback() {
+            @Override
+            public void onPaymentResult(PaymentRequest request, PaymentResult result) {
+                assertFalse(result.isSuccess());
+            }
 
-        // ASSERT
-        assertSame(paymentResult, actual);
+            @Override
+            public void onPaymentException(PaymentRequest request, PaymentException exception) {
+                fail("did not expect an exception");
+            }
+        });
     }
 
     @Test
-    public void errorResponseFromWorldHandledCorrectly() throws Exception {
+    public void documentParseExceptionHandledCorrectly() throws Exception {
         // ARRANGE
         WorldpayPaymentService sut = new WorldpayPaymentService();
         PaymentRequest paymentRequest = new PaymentRequest();
-        sut.target = targetWithResponse(500, xmlFixture("/successResponse.xml"));
-        sut.worldpayDocumentBuilder = mock(WorldpayDocumentBuilder.class);
-
-        // ACT
-        PaymentResult actual = sut.makePayment(paymentRequest, siteUrl);
-
-        // ASSERT
-        assertFalse(actual.isSuccess());
-    }
-
-    @Test(expected = PaymentException.class)
-    public void webTargetExceptionWrappedAsExpected() throws Exception {
-        // ARRANGE
-        WorldpayPaymentService sut = new WorldpayPaymentService();
-        PaymentRequest paymentRequest = new PaymentRequest();
-        PaymentResult paymentResult = new PaymentResult();
-        sut.target = exceptionThrowingTarget();
+        Response response = response(200, xmlFixture("/successResponse.xml"));
         sut.worldpayDocumentParser = mock(WorldpayDocumentParser.class);
+        when(sut.worldpayDocumentParser.parseResponse(any())).thenThrow(new PaymentException("arg"));
         sut.worldpayDocumentBuilder = mock(WorldpayDocumentBuilder.class);
-        when(sut.worldpayDocumentParser.parseResponse(any())).thenReturn(paymentResult);
+        sut.paymentUrlFormatter = appendingUrlFormatter();
 
         // ACT
-        PaymentResult actual = sut.makePayment(paymentRequest, siteUrl);
+        sut.handleResponse(paymentRequest, siteUrl, response, new PaymentCallback() {
+            @Override
+            public void onPaymentResult(PaymentRequest request, PaymentResult result) {
+                fail("expected a failure");
+            }
 
-        // ASSERT -- see expected
+            @Override
+            public void onPaymentException(PaymentRequest request, PaymentException exception) {
+            }
+        });
     }
 
-    @Test(expected = PaymentException.class)
-    public void documentBuilderExceptionWrappedAsExpected() throws Exception {
-        // ARRANGE
-        WorldpayPaymentService sut = new WorldpayPaymentService();
-        PaymentRequest paymentRequest = new PaymentRequest();
-        PaymentResult paymentResult = new PaymentResult();
-        sut.target = targetWithResponse(200, xmlFixture("/successResponse.xml"));
-        sut.worldpayDocumentParser = mock(WorldpayDocumentParser.class);
-        sut.worldpayDocumentBuilder = mock(WorldpayDocumentBuilder.class);
-        when(sut.worldpayDocumentBuilder.buildPaymentDocument(any())).thenThrow(new RuntimeException("arg"));
-        when(sut.worldpayDocumentParser.parseResponse(any())).thenReturn(paymentResult);
-
-        // ACT
-        PaymentResult actual = sut.makePayment(paymentRequest, siteUrl);
-
-        // ASSERT -- see expected exception
-    }
-
-    WebTarget targetWithResponse(int status, Object entity) {
+    Response response(int status, Object entity) {
         Response response = mock(Response.class);
         when(response.getStatus()).thenReturn(status);
         when(response.getEntity()).thenReturn(entity);
-
-        WebTarget target = mock(WebTarget.class);
-        Invocation.Builder builder = mock(Invocation.Builder.class);
-        when(target.request()).thenReturn(builder);
-        when(builder.post(any())).thenReturn(response);
-
-        return target;
-    }
-
-    WebTarget exceptionThrowingTarget() {
-        WebTarget target = mock(WebTarget.class);
-        Invocation.Builder builder = mock(Invocation.Builder.class);
-        when(target.request()).thenReturn(builder);
-        when(builder.post(any())).thenThrow(new RuntimeException("arg"));
-        return target;
+        return response;
     }
 
     InputStream xmlFixture(String name) throws IOException {
         return WorldpayPaymentServiceTest.class.getResourceAsStream(name);
-        //return IOUtils.toString(in, "UTF-8");
     }
 
     PaymentUrlFormatter appendingUrlFormatter() {

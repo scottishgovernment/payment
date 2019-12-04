@@ -5,6 +5,7 @@ import scot.gov.payment.service.worldpay.responseurls.PaymentUrlFormatter;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -25,24 +26,44 @@ public class WorldpayPaymentService implements PaymentService {
     PaymentUrlFormatter paymentUrlFormatter;
 
     @Override
-    public PaymentResult makePayment(PaymentRequest request, String siteUrl) throws PaymentException {
+    public void makePayment(PaymentRequest request, String siteUrl, PaymentCallback callback) {
+
         try {
-            return doPayment(request, siteUrl);
-        } catch (Exception e) {
-            throw new PaymentException("Failed to post to worldpay", e);
+            Entity<String> entity = paymentEntity(request);
+            doPost(entity, request, siteUrl, callback);
+        } catch (PaymentException e) {
+            callback.onPaymentException(request, new PaymentException("Failed to post to worldpay", e));
         }
     }
 
-    PaymentResult doPayment(PaymentRequest request, String siteUrl) throws PaymentException {
-        Response response = postToWorldPay(request);
+    void doPost(Entity<String> entity, PaymentRequest request, String siteUrl, PaymentCallback paymentCallback) {
+        InvocationCallback<Response> callback = new InvocationCallback<Response>() {
+            @Override
+            public void completed(Response response) {
+                handleResponse(request, siteUrl, response, paymentCallback);
+            }
+
+            @Override
+            public void failed(Throwable throwable) {
+                paymentCallback.onPaymentException(request, new PaymentException("Failed to make payment", throwable));
+            }
+        };
+        target.request().async().post(entity, callback);
+    }
+
+    void handleResponse(PaymentRequest request, String siteUrl, Response response, PaymentCallback callback) {
+        try {
+            PaymentResult result = responseToResult(response, siteUrl);
+            callback.onPaymentResult(request, result);
+        } catch (PaymentException e) {
+            callback.onPaymentException(request, e);
+        }
+    }
+
+    PaymentResult responseToResult(Response response, String siteUrl) throws PaymentException {
         return response.getStatus() == 200
                 ? extractResult(response, siteUrl)
                 : extractError(response);
-    }
-
-    Response postToWorldPay(PaymentRequest request) throws PaymentException {
-        Entity<String> entity = paymentEntity(request);
-        return target.request().post(entity);
     }
 
     Entity<String> paymentEntity(PaymentRequest request) throws PaymentException {

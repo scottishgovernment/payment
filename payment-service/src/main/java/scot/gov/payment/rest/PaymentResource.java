@@ -5,6 +5,8 @@ import scot.gov.payment.service.*;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -28,28 +30,33 @@ public class PaymentResource {
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public Response makePayment(
+    public void makePayment(
             PaymentRequest request,
             @HeaderParam("x-forwarded-host") String forwardedHost,
-            @HeaderParam("x-forwarded-proto") String forwardedProtocol) {
+            @HeaderParam("x-forwarded-proto") String forwardedProtocol,
+            @Suspended final AsyncResponse response) {
 
         listener.onPaymentRequest(request);
+        String siteUrl = getSiteUrl(forwardedHost, forwardedProtocol);
 
-        try {
-            String siteUrl = getSiteUrl(forwardedHost, forwardedProtocol);
-            PaymentResult result = service.makePayment(request, siteUrl);
-            listener.onPaymentResult(request, result);
+        service.makePayment(request, siteUrl, new PaymentCallback() {
+            @Override
+            public void onPaymentResult(PaymentRequest request, PaymentResult result) {
+                listener.onPaymentResult(request, result);
+                int status = result.isSuccess() ? 200 : 400;
+                response.resume(Response.status(status).entity(result).build());
+            }
 
-            int status = result.isSuccess() ? 200 : 400;
-            return Response.status(status).entity(result).build();
-        } catch (PaymentException e) {
-            listener.onPaymentException(request, e);
-            PaymentResult result = PaymentResultBuilder.error("Unexpected error trying to process payment").build();
-            return Response
-                    .status(500)
-                    .entity(result)
-                    .build();
-        }
+            @Override
+            public void onPaymentException(PaymentRequest request, PaymentException e) {
+                listener.onPaymentException(request, e);
+                PaymentResult result = PaymentResultBuilder.error("Unexpected error trying to process payment").build();
+                response.resume(Response
+                        .status(500)
+                        .entity(result)
+                        .build());
+            }
+        });
     }
 
     String getSiteUrl(String forwardedHost, String forwardedProtocol) {
