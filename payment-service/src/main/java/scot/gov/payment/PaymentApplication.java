@@ -1,5 +1,6 @@
 package scot.gov.payment;
 
+import scot.gov.payment.rest.ErrorHandler;
 import scot.gov.payment.rest.HealthCheck;
 import scot.gov.payment.rest.PaymentResource;
 import scot.gov.payment.rest.RequestLogger;
@@ -22,9 +23,12 @@ public class PaymentApplication extends Application {
     @Inject
     RequestLogger logger;
 
+    @Inject
+    ErrorHandler errorHandler;
+
     @Override
     public Set<Object> getSingletons() {
-        return new HashSet<>(asList(paymentResource, healthCheck, logger));
+        return new HashSet<>(asList(paymentResource, healthCheck, logger, errorHandler));
     }
 
 }
