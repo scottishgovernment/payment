@@ -47,6 +47,7 @@ public class WorldpayPaymentServiceTest {
         WorldpayPaymentService sut = new WorldpayPaymentService();
         PaymentRequest paymentRequest = new PaymentRequest();
         Response response = response(200, xmlFixture("/successResponse.xml"));
+        sut.amountConverter = new AmountConverter();
         sut.worldpayDocumentParser = new WorldpayDocumentParser();
         sut.worldpayDocumentBuilder = mock(WorldpayDocumentBuilder.class);
         sut.paymentUrlFormatter = appendingUrlFormatter();

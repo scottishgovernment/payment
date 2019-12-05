@@ -25,6 +25,9 @@ public class WorldpayPaymentService implements PaymentService {
     @Inject
     PaymentUrlFormatter paymentUrlFormatter;
 
+    @Inject
+    AmountConverter amountConverter;
+
     @Override
     public void makePayment(PaymentRequest request, String siteUrl, PaymentCallback callback) {
 
@@ -68,6 +71,10 @@ public class WorldpayPaymentService implements PaymentService {
 
     Entity<String> paymentEntity(PaymentRequest request) throws PaymentException {
         try {
+            // convert the amount from pounds and pence to pence as worldpay expect
+            String convertedAmount = amountConverter.convert(request.getAmount());
+            request.setAmount(convertedAmount);
+
             String worldpayPaymentDocument = worldpayDocumentBuilder.buildPaymentDocument(request);
             return Entity.entity(worldpayPaymentDocument, MediaType.APPLICATION_XML_TYPE);
         } catch (Exception e) {
