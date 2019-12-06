@@ -10,13 +10,13 @@
     <version>4</version>
   </parent>
 
-  <groupId>scot.gov.payment</groupId>
+  <groupId>scot.gov.publishing.payment</groupId>
   <artifactId>payment</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>payment</name>
-  <description>A simple payment.</description>
+  <name>Payment</name>
+  <description>Payment service for www.gov.scot</description>
 
   <modules>
     <module>payment-service</module>

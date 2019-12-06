@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>scot.gov.payment</groupId>
+    <groupId>scot.gov.publishing.payment</groupId>
     <artifactId>payment</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
