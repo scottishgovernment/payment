@@ -79,6 +79,15 @@
               </mapper>
             </data>
             <data>
+              <src>${basedir}/src/check-payment</src>
+              <type>file</type>
+              <mapper>
+                <type>perm</type>
+                <prefix>/opt/payment</prefix>
+                <filemode>755</filemode>
+              </mapper>
+            </data>
+            <data>
               <src>${basedir}/src/systemd</src>
               <type>directory</type>
               <mapper>
