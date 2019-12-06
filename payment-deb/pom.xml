@@ -95,17 +95,6 @@
                 <prefix>/lib/systemd/system</prefix>
               </mapper>
             </data>
-            <data>
-              <type>template</type>
-              <paths>
-                <path>var/log/payment</path>
-              </paths>
-              <mapper>
-                <type>perm</type>
-                <user>payment</user>
-                <group>nogroup</group>
-              </mapper>
-            </data>
           </dataSet>
         </configuration>
       </plugin>
