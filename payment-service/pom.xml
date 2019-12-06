@@ -12,8 +12,7 @@
 
   <artifactId>payment-service</artifactId>
 
-  <name>Payment Service for gov.scot</name>
-  <description>Payment Service for gov.scot</description>
+  <name>Payment Service</name>
 
   <properties>
     <undertow.version>2.0.28.Final</undertow.version>
