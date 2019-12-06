@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 
 public class PaymentUrlFormatter {
 
-    UrlEncoder encoder = new UrlEncoder(StandardCharsets.UTF_8.toString());
+    private UrlEncoder encoder = new UrlEncoder(StandardCharsets.UTF_8.toString());
 
     public String formatPaymentUrl(
             String paymentUrl,
