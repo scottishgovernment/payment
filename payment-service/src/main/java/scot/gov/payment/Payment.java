@@ -17,6 +17,7 @@ public class Payment {
 
     @Inject
     public Payment() {
+        // Default constructor
     }
 
     @Inject
