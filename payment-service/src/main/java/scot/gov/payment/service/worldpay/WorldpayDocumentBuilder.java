@@ -70,7 +70,7 @@ public class WorldpayDocumentBuilder {
     Element appendOrder(Document document, Element parent, PaymentRequest request) {
         Element element = document.createElement("order");
         element.setAttribute("orderCode", request.getOrderCode());
-        element.setAttribute("installationId", configuration.getWorldpay().getInstalationId());
+        element.setAttribute("installationId", configuration.getWorldpay().getInstallationId());
         appendDescription(document, element, request);
         appendAmount(document, element, request);
         appendPaymentMethodMask(document, element);

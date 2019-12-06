@@ -34,7 +34,7 @@ public class PaymentConfiguration {
         private String merchantCode;
 
         @NotEmpty
-        private String instalationId;
+        private String installationId;
 
         @NotEmpty
         private String username;
@@ -62,12 +62,12 @@ public class PaymentConfiguration {
             this.merchantCode = merchantCode;
         }
 
-        public String getInstalationId() {
-            return instalationId;
+        public String getInstallationId() {
+            return installationId;
         }
 
-        public void setInstalationId(String instalationId) {
-            this.instalationId = instalationId;
+        public void setInstallationId(String installationId) {
+            this.installationId = installationId;
         }
 
         public String getUsername() {

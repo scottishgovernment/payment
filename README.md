@@ -1,12 +1,18 @@
 # Payment
 
-This service is used to integrate with Worldpay for incoming payments to the Scottish Government via the gov.scot website
+This service is used to integrate with Worldpay for incoming payments to the
+Scottish Government via the www.gov.scot website.
 
 # Configuration
 
+* `port`
+    * Port that the service should listen on.
+    * Type: Integer
+    * Default: 9095
+
 * `worldpay_url`
     * Url used to submit payments
-    * Type: Sting
+    * Type: String
     * Default: none
 
 * `worldpay_username`
@@ -20,12 +26,12 @@ This service is used to integrate with Worldpay for incoming payments to the Sco
     * Default: none
 
 * `worldpay_mechantCode`
-    * Merchant code included in worldpay requests
+    * Merchant code included in Worldpay requests
     * Type: String
     * Default: none
 
-* `worldpay_instalationId`
-    * Instalation id included in worldpay requests
+* `worldpay_installationId`
+    * Installation id included in Worldpay requests
     * Type: String
     * Default: none
 
@@ -34,22 +40,15 @@ This service is used to integrate with Worldpay for incoming payments to the Sco
 
 `POST /payment`
 
-Requests a payment be processed.  If successful the response will indicate a worldpay url that the user can be
-redirected to to make a payment.  If worldpay return an error or an exception is thrown then an error will be
-returned.
-
-{
-    "validPostcode": true,
-    "scottishPostcode": true,
-    "inRentPressureZone": true,
-    "rentPressureZoneTitle": "Stockbridge, Edinburgh"
-    "maxIncrease": 1.5
-}
+Requests a payment be processed.  If successful the response will indicate a
+Worldpay URL that the user can be redirected to to make a payment.  If Worldpay
+return an error or an exception is thrown then an error will be returned.
 
 # Monitoring
 
-The healthcheck endpoint is `GET /health`.  The status code is `200` if the service is healthy, and `503`
-otherwise.
+The healthcheck endpoint is `GET /health`.  The status code is `200` if the service
+is healthy, and `503` otherwise.
 
-The `data` property is an erray of metrics collected when processing payments, and `errors' will return a list of
-errors that have caused the serrivce to be unhealthy.
+The `data` property is an array of metrics collected when processing payments,
+and `errors' will return a list of errors that have caused the service to be
+unhealthy.
