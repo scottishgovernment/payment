@@ -16,15 +16,13 @@
   <description>Payment Service for gov.scot</description>
 
   <properties>
-    <sonar.exclusions>target/generated-sources/</sonar.exclusions>
-
     <undertow.version>2.0.28.Final</undertow.version>
     <resteasy.version>3.9.1.Final</resteasy.version>
     <jackson.version>2.6.1</jackson.version>
     <slf4j.version>1.7.29</slf4j.version>
     <logback.version>1.2.3</logback.version>
     <sonar.exclusions>
-      target/**,
+      target/generated-sources/,
       src/main/java/scot/gov/payment/rest/listeners/LoggingResourceListener.java
     </sonar.exclusions>
   </properties>
