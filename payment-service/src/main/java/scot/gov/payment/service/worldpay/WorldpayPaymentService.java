@@ -28,6 +28,11 @@ public class WorldpayPaymentService implements PaymentService {
     @Inject
     AmountConverter amountConverter;
 
+    @Inject
+    WorldpayPaymentService() {
+        // Default constructor
+    }
+
     @Override
     public void makePayment(PaymentRequest request, String siteUrl, PaymentCallback callback) {
 

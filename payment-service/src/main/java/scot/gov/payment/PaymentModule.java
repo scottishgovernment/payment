@@ -25,7 +25,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-@Module(injects = Payment.class)
+@Module
 public class PaymentModule {
 
     private static final Logger LOG = LoggerFactory.getLogger(PaymentModule.class);

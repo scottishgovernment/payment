@@ -26,6 +26,11 @@ public class HealthCheck {
     private static final double EPSILON = 0.00001;
 
     @Inject
+    HealthCheck() {
+        // Default constructor
+    }
+
+    @Inject
     MetricRegistry metricRegistry;
 
     @GET

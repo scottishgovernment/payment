@@ -1,6 +1,6 @@
 package scot.gov.payment;
 
-import dagger.ObjectGraph;
+import dagger.Component;
 import io.undertow.Undertow;
 import org.jboss.resteasy.plugins.server.undertow.UndertowJaxrsServer;
 import org.slf4j.Logger;
@@ -8,11 +8,16 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.net.InetSocketAddress;
 
 public class Payment {
 
     private static final Logger LOG = LoggerFactory.getLogger(Payment.class);
+
+    @Inject
+    public Payment() {
+    }
 
     @Inject
     PaymentConfiguration config;
@@ -24,8 +29,8 @@ public class Payment {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
         try {
-            ObjectGraph graph = ObjectGraph.create(new PaymentModule());
-            graph.get(Payment.class).run();
+            Payment payment = DaggerPayment_Main.create().main();
+            payment.run();
         } catch (Throwable t) {
             LOG.error("Application failed", t);
             System.exit(1);
@@ -48,4 +53,11 @@ public class Payment {
             return address.getPort();
         }
     }
+
+    @Singleton
+    @Component(modules = PaymentModule.class)
+    interface Main {
+        Payment main();
+    }
+
 }

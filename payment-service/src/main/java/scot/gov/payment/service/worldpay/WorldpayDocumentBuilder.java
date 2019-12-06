@@ -30,6 +30,11 @@ public class WorldpayDocumentBuilder {
     @Inject
     PaymentConfiguration configuration;
 
+    @Inject
+    WorldpayDocumentBuilder() {
+        // Default constructor
+    }
+
     public String buildPaymentDocument(PaymentRequest request)
             throws ParserConfigurationException, TransformerException, UnsupportedEncodingException {
 

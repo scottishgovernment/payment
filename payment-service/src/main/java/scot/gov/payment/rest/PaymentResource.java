@@ -19,6 +19,11 @@ import static net.logstash.logback.encoder.org.apache.commons.lang.StringUtils.i
 public class PaymentResource {
 
     @Inject
+    PaymentResource() {
+        // Default constructor
+    }
+
+    @Inject
     PaymentConfiguration configuration;
 
     @Inject
