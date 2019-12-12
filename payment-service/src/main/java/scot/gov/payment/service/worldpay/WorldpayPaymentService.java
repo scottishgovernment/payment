@@ -1,5 +1,7 @@
 package scot.gov.payment.service.worldpay;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scot.gov.payment.service.*;
 import scot.gov.payment.service.worldpay.responseurls.PaymentUrlFormatter;
 
@@ -12,6 +14,8 @@ import javax.ws.rs.core.Response;
 import java.io.InputStream;
 
 public class WorldpayPaymentService implements PaymentService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WorldpayPaymentService.class);
 
     @Inject
     WebTarget target;
@@ -88,7 +92,8 @@ public class WorldpayPaymentService implements PaymentService {
     }
 
     PaymentResult extractError(Response response) {
-        String error = String.format("Failed to make payment: %s", response.getStatus());
+        String error = "A payment cannot be made at this time";
+        LOG.error(String.format("Failed to make a payment: %s", response.readEntity(String.class)));
         return PaymentResultBuilder.error(error).build();
     }
 
