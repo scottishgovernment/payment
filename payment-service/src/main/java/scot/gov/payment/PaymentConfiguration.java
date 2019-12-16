@@ -28,7 +28,8 @@ public class PaymentConfiguration {
 
     public static class Worldpay {
 
-        private String url = "https://secure-test.worldpay.com/jsp/merchant/xml/paymentService.jsp";
+        @NotEmpty
+        private String url;
 
         @NotEmpty
         private String merchantCode;
