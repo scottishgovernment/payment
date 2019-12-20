@@ -5,6 +5,7 @@ import scot.gov.payment.service.PaymentException;
 import javax.inject.Inject;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Locale;
 
 /**
  * Worldpay expects the amount to be specified as pence.
@@ -22,7 +23,7 @@ public class AmountConverter {
     public String convert(String amount) throws PaymentException {
         try {
             String poundAmount = String.format("£%s", amount);
-            Number number = NumberFormat.getCurrencyInstance().parse(poundAmount);
+            Number number = NumberFormat.getCurrencyInstance(Locale.UK).parse(poundAmount);
             int penceAmount = (int) (number.doubleValue() * 100);
             return Integer.toString(penceAmount);
         } catch (ParseException e) {
