@@ -6,6 +6,7 @@ After=network.target
 User=payment
 WorkingDirectory=/opt/payment
 ExecStart=/opt/payment/run
+EnvironmentFile=-/etc/default/payment
 SyslogIdentifier=payment
 Restart=on-failure
 

@@ -3,6 +3,6 @@
 JAVA=${JAVA_HOME:-/usr}/bin/java
 set -eu
 
-exec java \
+exec "$JAVA" \
   -Dlogback.configurationFile=/opt/payment/logback.xml \
   -jar /opt/payment/payment.jar
