@@ -74,6 +74,7 @@ public class WorldpayDocumentBuilder {
         appendDescription(document, element, request);
         appendAmount(document, element, request);
         appendPaymentMethodMask(document, element);
+        appendShopper(document, element, request);
         parent.appendChild(element);
         return element;
     }
@@ -104,6 +105,20 @@ public class WorldpayDocumentBuilder {
     Element appendInclude(Document document, Element parent) {
         Element element = document.createElement("include");
         element.setAttribute("code", "ALL");
+        parent.appendChild(element);
+        return element;
+    }
+
+    Element appendShopper(Document document, Element parent, PaymentRequest request) {
+        Element element = document.createElement("shopper");
+        parent.appendChild(element);
+        appendShopperEmail(document, element, request);
+        return element;
+    }
+
+    Element appendShopperEmail(Document document, Element parent, PaymentRequest request) {
+        Element element = document.createElement("shopperEmailAddress");
+        element.appendChild(document.createTextNode(request.getEmailAddress()));
         parent.appendChild(element);
         return element;
     }
