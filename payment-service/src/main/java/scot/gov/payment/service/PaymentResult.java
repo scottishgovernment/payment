@@ -2,6 +2,16 @@ package scot.gov.payment.service;
 
 public class PaymentResult {
 
+    public PaymentResult() {
+    }
+
+    public PaymentResult(String error, String orderCode, boolean success, String paymentUrl) {
+        this.success = success;
+        this.error = error;
+        this.orderCode = orderCode;
+        this.paymentUrl = paymentUrl;
+    }
+
     private boolean success;
 
     private String error;

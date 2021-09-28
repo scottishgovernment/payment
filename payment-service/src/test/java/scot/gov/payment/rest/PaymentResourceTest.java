@@ -134,7 +134,10 @@ public class PaymentResourceTest {
     }
 
     PaymentRequest anyRequest() {
-        return mock(PaymentRequest.class);
+        PaymentRequest request = new PaymentRequest();
+        request.setOrderCode("orderCode");
+        request.setAmount("1.00");
+        return request;
     }
 
     class CapturingPaymentService implements PaymentService {
