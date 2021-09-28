@@ -15,7 +15,7 @@
   <name>Payment Service</name>
 
   <properties>
-    <undertow.version>2.0.28.Final</undertow.version>
+    <undertow.version>2.1.6.Final</undertow.version>
     <resteasy.version>3.9.1.Final</resteasy.version>
     <jackson.version>2.6.1</jackson.version>
     <slf4j.version>1.7.29</slf4j.version>
