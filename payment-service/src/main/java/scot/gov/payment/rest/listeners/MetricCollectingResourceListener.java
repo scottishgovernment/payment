@@ -10,6 +10,9 @@ import scot.gov.payment.service.PaymentRequest;
 import scot.gov.payment.service.PaymentResult;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolation;
+
+import java.util.Set;
 
 import static scot.gov.payment.rest.listeners.MetricName.*;
 import static scot.gov.payment.rest.listeners.MetricName.ERROR_RATE;
@@ -27,6 +30,8 @@ public class MetricCollectingResourceListener implements PaymentResourceListener
 
     Counter exceptionCounter;
 
+    Counter invalidRequestCounter;
+
     Counter errorCounter;
 
     Meter requestMeter;
@@ -41,6 +46,7 @@ public class MetricCollectingResourceListener implements PaymentResourceListener
         this.requestCounter = registerCounter(metricRegistry, REQUESTS);
         this.errorCounter = registerCounter(metricRegistry, ERRORS);
         this.exceptionCounter = registerCounter(metricRegistry, MetricName.EXCEPTIONS);
+        this.invalidRequestCounter = registerCounter(metricRegistry, MetricName.INVALID_REQUESTS);
         this.requestMeter = registerMeter(metricRegistry, REQUEST_RATE);
         this.errorMeter = registerMeter(metricRegistry, ERROR_RATE);
         this.exceptionMeter = registerMeter(metricRegistry, EXCEPTION_RATE);
@@ -58,6 +64,11 @@ public class MetricCollectingResourceListener implements PaymentResourceListener
             errorCounter.inc();
             errorMeter.mark();
         }
+    }
+
+    @Override
+    public void onInvalidPaymentRequest(PaymentRequest request, Set<ConstraintViolation<PaymentRequest>> violations) {
+        invalidRequestCounter.inc();
     }
 
     @Override

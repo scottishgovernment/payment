@@ -127,6 +127,12 @@
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.12.0</version>
+    </dependency>
+
     <!-- Test libraries -->
     <dependency>
       <groupId>junit</groupId>

@@ -7,6 +7,9 @@ public enum MetricName {
     // count of all requests
     REQUESTS("requests"),
 
+    // count of invalid requests
+    INVALID_REQUESTS("invalidRequests"),
+
     // count of unexpected exceptions
     EXCEPTIONS("exceptions"),
 

@@ -29,19 +29,19 @@ public class PaymentConfiguration {
     public static class Worldpay {
 
         @NotEmpty
-        private String url;
+        private String url = "sdf";
 
         @NotEmpty
-        private String merchantCode;
+        private String merchantCode = "blah";
 
         @NotEmpty
-        private String installationId;
+        private String installationId = "sdf";
 
         @NotEmpty
-        private String username;
+        private String username ="asf";
 
         @NotEmpty
-        private String password;
+        private String password = "asdasd";
 
         int connectTimeoutSeconds = 1;
 

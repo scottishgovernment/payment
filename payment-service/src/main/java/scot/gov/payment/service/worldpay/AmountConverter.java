@@ -19,7 +19,6 @@ public class AmountConverter {
         // defautl constructor
     }
 
-
     public String convert(String amount) throws PaymentException {
         try {
             String poundAmount = String.format("£%s", amount);

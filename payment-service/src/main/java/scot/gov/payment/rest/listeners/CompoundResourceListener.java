@@ -5,8 +5,10 @@ import scot.gov.payment.service.PaymentException;
 import scot.gov.payment.service.PaymentRequest;
 import scot.gov.payment.service.PaymentResult;
 
+import javax.validation.ConstraintViolation;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Set;
 
 public class CompoundResourceListener implements PaymentResourceListener {
 
@@ -24,6 +26,11 @@ public class CompoundResourceListener implements PaymentResourceListener {
     @Override
     public void onPaymentResult(PaymentRequest request, PaymentResult result) {
         listeners.stream().forEach(l -> l.onPaymentResult(request, result));
+    }
+
+    @Override
+    public void onInvalidPaymentRequest(PaymentRequest request, Set<ConstraintViolation<PaymentRequest>> violations) {
+        listeners.stream().forEach(l -> l.onInvalidPaymentRequest(request, violations));
     }
 
     @Override
