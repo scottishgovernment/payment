@@ -4,11 +4,15 @@ import scot.gov.payment.PaymentConfiguration;
 import scot.gov.payment.service.*;
 
 import javax.inject.Inject;
+import javax.validation.*;
 import javax.ws.rs.*;
+import javax.ws.rs.Path;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.util.Set;
 
 import static net.logstash.logback.encoder.org.apache.commons.lang.StringUtils.isBlank;
 
@@ -32,6 +36,8 @@ public class PaymentResource {
     @Inject
     PaymentResourceListener listener;
 
+    Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
@@ -40,6 +46,15 @@ public class PaymentResource {
             @HeaderParam("x-forwarded-host") String forwardedHost,
             @HeaderParam("x-forwarded-proto") String forwardedProtocol,
             @Suspended final AsyncResponse response) {
+
+        Set<ConstraintViolation<PaymentRequest>> violations = validator.validate(request);
+
+        if (!violations.isEmpty()) {
+            listener.onInvalidPaymentRequest(request, violations);
+            InvalidPaymentResponse invalidPayment = InvalidPaymentResponse.invalidResponse(violations);
+            response.resume(Response.status(400).entity(invalidPayment).build());
+            return;
+        }
 
         listener.onPaymentRequest(request);
         String siteUrl = getSiteUrl(forwardedHost, forwardedProtocol);

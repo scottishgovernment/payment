@@ -3,7 +3,6 @@ package scot.gov.payment.rest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.junit.MockitoJUnitRunner;
 import scot.gov.payment.rest.listeners.CompoundResourceListener;
 import scot.gov.payment.service.*;
 
@@ -80,8 +79,6 @@ public class PaymentResourceTest {
         assertEquals("https://www.gov.scot/", service.siteUrl);
     }
 
-
-
     @Test
     public void unsucessfullPaymentReturns400Response() throws PaymentException{
         // ARRANGE
@@ -125,6 +122,25 @@ public class PaymentResourceTest {
         assertEquals(500, value.getStatus());
     }
 
+    @Test
+    public void invalidPaymentExceptionReturns400Response() throws PaymentException {
+        PaymentResource sut = new PaymentResource();
+        PaymentResult result = success();
+        CapturingPaymentService service = new CapturingPaymentService(result);
+        sut.service = service;
+        sut.listener = new CompoundResourceListener();
+        ArgumentCaptor<Response> response = ArgumentCaptor.forClass(Response.class);
+        AsyncResponse asyncResponse = mock(AsyncResponse.class);
+        when(asyncResponse.resume(response.capture())).thenReturn(true);
+
+        // ACT
+        sut.makePayment(invalidRequest(), "wwww.gov.scot", null, asyncResponse);
+
+        // ASSERT
+        Response value = response.getValue();
+        assertEquals(400, value.getStatus());
+    }
+
     PaymentResult success() {
         return PaymentResultBuilder.success().build();
     }
@@ -135,11 +151,18 @@ public class PaymentResourceTest {
 
     PaymentRequest anyRequest() {
         PaymentRequest request = new PaymentRequest();
-        request.setOrderCode("orderCode");
         request.setAmount("1.00");
+        request.setDescription("description");
+        request.setEmailAddress("test@email.com");
+        request.setOrderCode("ordercode");
         return request;
     }
 
+    PaymentRequest invalidRequest() {
+        PaymentRequest request = anyRequest();
+        request.setEmailAddress("invalid");
+        return request;
+    }
     class CapturingPaymentService implements PaymentService {
 
         PaymentResult result;
