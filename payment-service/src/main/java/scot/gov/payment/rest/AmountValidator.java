@@ -6,8 +6,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
-public class AmountValidator implements ConstraintValidator<ValidAmount, String>
-{
+public class AmountValidator implements ConstraintValidator<ValidAmount, String> {
     public boolean isValid(String amount, ConstraintValidatorContext cxt) {
         try {
             String poundAmount = String.format("£%s", amount);
