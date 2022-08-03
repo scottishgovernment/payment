@@ -7,10 +7,10 @@ import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scot.gov.payment.rest.PaymentResourceListener;
 import scot.gov.payment.rest.listeners.CompoundResourceListener;
 import scot.gov.payment.rest.listeners.LoggingResourceListener;
 import scot.gov.payment.rest.listeners.MetricCollectingResourceListener;
-import scot.gov.payment.rest.PaymentResourceListener;
 import scot.gov.payment.service.PaymentService;
 import scot.gov.payment.service.worldpay.WorldpayDocumentParser;
 import scot.gov.payment.service.worldpay.WorldpayPaymentService;
@@ -49,26 +49,32 @@ public class PaymentModule {
     }
 
     @Provides
+    PaymentConfiguration.Worldpay worldpayConfig(PaymentConfiguration config) {
+        return config.getWorldpay();
+    }
+
+    @Provides
     @Singleton
-    Client client(PaymentConfiguration config) {
-        int connectTimeout = config.getWorldpay().getConnectTimeoutSeconds();
-        int readTimeout = config.getWorldpay().getReadTimeoutSeconds();
+    Client client(PaymentConfiguration.Worldpay config) {
         ResteasyClientBuilder builder =
-                (ResteasyClientBuilder) ResteasyClientBuilder.newBuilder()
-                    .connectTimeout(connectTimeout, SECONDS)
-                    .readTimeout(readTimeout, SECONDS);
-        Client client = builder.connectionPoolSize(10).build();
-        String username = config.getWorldpay().getUsername();
-        String password = config.getWorldpay().getPassword();
-        ClientRequestFilter basicAuthFilter = new BasicAuthentication(username, password);
+                (ResteasyClientBuilder) ResteasyClientBuilder.newBuilder();
+        Client client = builder
+                .connectionPoolSize(10)
+                .connectionTTL(config.getConnectionTTLSeconds(), SECONDS)
+                .connectTimeout(config.getConnectTimeoutSeconds(), SECONDS)
+                .readTimeout(config.getReadTimeoutSeconds(), SECONDS)
+                .build();
+        ClientRequestFilter basicAuthFilter = new BasicAuthentication(
+                config.getUsername(),
+                config.getPassword());
         client.register(basicAuthFilter);
         return client;
     }
 
     @Provides
     @Singleton
-    WebTarget worldpayTarget(Client client, PaymentConfiguration config) {
-        String url = config.getWorldpay().getUrl();
+    WebTarget worldpayTarget(Client client, PaymentConfiguration.Worldpay config) {
+        String url = config.getUrl();
         UriBuilder uriBuilder = UriBuilder.fromUri(url);
         return client.target(uriBuilder);
     }

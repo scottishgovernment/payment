@@ -45,6 +45,8 @@ public class PaymentConfiguration {
 
         int connectTimeoutSeconds = 1;
 
+        int connectionTTLSeconds = 360;
+
         int readTimeoutSeconds = 10;
 
         public String getUrl() {
@@ -93,6 +95,14 @@ public class PaymentConfiguration {
 
         public void setConnectTimeoutSeconds(int connectTimeoutSeconds) {
             this.connectTimeoutSeconds = connectTimeoutSeconds;
+        }
+
+        public int getConnectionTTLSeconds() {
+            return connectionTTLSeconds;
+        }
+
+        public void setConnectionTTLSeconds(int connectionTTLSeconds) {
+            this.connectionTTLSeconds = connectionTTLSeconds;
         }
 
         public int getReadTimeoutSeconds() {
