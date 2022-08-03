@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toMap;
-import static net.logstash.logback.encoder.org.apache.commons.lang.StringUtils.startsWith;
+import static org.apache.commons.lang3.StringUtils.startsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

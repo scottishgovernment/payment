@@ -4,17 +4,17 @@ import scot.gov.payment.PaymentConfiguration;
 import scot.gov.payment.service.*;
 
 import javax.inject.Inject;
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.ws.rs.*;
-import javax.ws.rs.Path;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import java.util.Set;
 
-import static net.logstash.logback.encoder.org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * Rest endpoint for processing payments.
