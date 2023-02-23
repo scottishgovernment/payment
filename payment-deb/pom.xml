@@ -6,7 +6,7 @@
   <parent>
     <groupId>scot.gov.publishing.payment</groupId>
     <artifactId>payment</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.14</version>
   </parent>
 
   <artifactId>payment-deb</artifactId>
@@ -19,7 +19,7 @@
     <dependency>
       <groupId>scot.gov.publishing.payment</groupId>
       <artifactId>payment-service</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>1.0.14</version>
     </dependency>
   </dependencies>
 
