@@ -19,6 +19,7 @@ import scot.mygov.config.Configuration;
 
 import javax.inject.Singleton;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.UriBuilder;
@@ -57,7 +58,7 @@ public class PaymentModule {
     @Singleton
     Client client(PaymentConfiguration.Worldpay config) {
         ResteasyClientBuilder builder =
-                (ResteasyClientBuilder) ResteasyClientBuilder.newBuilder();
+                (ResteasyClientBuilder) ClientBuilder.newBuilder();
         Client client = builder
                 .connectionPoolSize(10)
                 .connectionTTL(config.getConnectionTTLSeconds(), SECONDS)
