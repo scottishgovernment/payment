@@ -30,22 +30,22 @@ public class RequestLoggerTest {
 
     @Test
     public void successfulResponseHasSuccessfulOutcome() {
-        assertEquals(outcome(Response.Status.Family.SUCCESSFUL), "success");
+        assertEquals("success", outcome(Response.Status.Family.SUCCESSFUL));
     }
 
     @Test
     public void clientErrorHasFailureOutcome() {
-        assertEquals(outcome(Response.Status.Family.CLIENT_ERROR), "failure");
+        assertEquals("failure", outcome(Response.Status.Family.CLIENT_ERROR));
     }
 
     @Test
     public void serverErrorHasFailureOutcome() {
-        assertEquals(outcome(Response.Status.Family.SERVER_ERROR), "failure");
+        assertEquals("failure", outcome(Response.Status.Family.SERVER_ERROR));
     }
 
     @Test
     public void otherResponseHasUnknownOutcome() {
-        assertEquals(outcome(Response.Status.Family.INFORMATIONAL), "unknown");
+        assertEquals("unknown", outcome(Response.Status.Family.INFORMATIONAL));
     }
 
     @Test
