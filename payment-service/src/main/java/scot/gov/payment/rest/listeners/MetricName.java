@@ -33,7 +33,7 @@ public enum MetricName {
         return name;
     }
 
-    public String name(Class clazz) {
+    public String name(Class<?> clazz) {
         return MetricRegistry.name(clazz, name);
     }
 
