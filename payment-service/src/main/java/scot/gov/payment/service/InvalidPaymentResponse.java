@@ -1,6 +1,7 @@
 package scot.gov.payment.service;
 
-import javax.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolation;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

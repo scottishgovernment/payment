@@ -1,17 +1,14 @@
 package scot.gov.payment.rest;
 
-import com.codahale.metrics.*;
+import com.codahale.metrics.Counter;
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-import scot.gov.payment.rest.listeners.MetricCollectingResourceListener;
 import scot.gov.payment.rest.listeners.MetricName;
-import scot.gov.payment.service.PaymentException;
-import scot.gov.payment.service.PaymentRequest;
-import scot.gov.payment.service.PaymentResult;
-
-import javax.ws.rs.core.Response;
 
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -20,7 +17,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static scot.gov.payment.rest.listeners.MetricName.EXCEPTION_RATE;
 
 /**
  * Created by z418868 on 25/11/2019.

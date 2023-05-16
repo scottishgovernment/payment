@@ -3,6 +3,7 @@ package scot.gov.payment.rest.listeners;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
+import jakarta.validation.ConstraintViolation;
 import scot.gov.payment.rest.PaymentResource;
 import scot.gov.payment.rest.PaymentResourceListener;
 import scot.gov.payment.service.PaymentException;
@@ -10,7 +11,6 @@ import scot.gov.payment.service.PaymentRequest;
 import scot.gov.payment.service.PaymentResult;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
 
 import java.util.Set;
 

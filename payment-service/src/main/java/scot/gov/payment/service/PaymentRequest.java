@@ -1,10 +1,9 @@
 package scot.gov.payment.service;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import scot.gov.payment.rest.ValidAmount;
 import scot.gov.payment.rest.ValidOrderCode;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 
 public class PaymentRequest {
 

@@ -1,11 +1,11 @@
 package scot.gov.payment.rest.listeners;
 
+import jakarta.validation.ConstraintViolation;
 import scot.gov.payment.rest.PaymentResourceListener;
 import scot.gov.payment.service.PaymentException;
 import scot.gov.payment.service.PaymentRequest;
 import scot.gov.payment.service.PaymentResult;
 
-import javax.validation.ConstraintViolation;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;

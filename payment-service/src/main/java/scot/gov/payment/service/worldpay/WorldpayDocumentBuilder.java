@@ -1,6 +1,5 @@
 package scot.gov.payment.service.worldpay;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
@@ -12,10 +11,15 @@ import javax.inject.Inject;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayOutputStream;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Builds a Document suitable for posting to Worldpay containing the relevant values from the configuration
@@ -36,7 +40,7 @@ public class WorldpayDocumentBuilder {
     }
 
     public String buildPaymentDocument(PaymentRequest request)
-            throws ParserConfigurationException, TransformerException, UnsupportedEncodingException {
+            throws ParserConfigurationException, TransformerException {
 
         DocumentBuilder documentBuilder = DocumentBuilderFactorySource.get().newDocumentBuilder();
         Document document = documentBuilder.newDocument();
@@ -123,17 +127,19 @@ public class WorldpayDocumentBuilder {
         return element;
     }
 
-    String toXML(Document document) throws TransformerException, UnsupportedEncodingException {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        Transformer transformer = transformerFactory.newTransformer();
+    String toXML(Document document) throws TransformerException {
+        TransformerFactory factory = TransformerFactory.newInstance();
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+        Transformer transformer = factory.newTransformer();
         transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, DOCTYPE_PUBLIC);
         transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, DOCTYPE_PRIVATE);
         DOMSource source = new DOMSource(document);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         StreamResult result = new StreamResult(out);
         transformer.transform(source, result);
-        return out.toString("UTF-8");
+        return out.toString(UTF_8);
     }
 
 }

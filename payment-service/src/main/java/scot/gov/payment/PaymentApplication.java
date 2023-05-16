@@ -1,5 +1,6 @@
 package scot.gov.payment;
 
+import jakarta.ws.rs.core.Application;
 import scot.gov.payment.rest.ErrorHandler;
 import scot.gov.payment.rest.HealthCheck;
 import scot.gov.payment.rest.PaymentResource;
@@ -7,7 +8,6 @@ import scot.gov.payment.rest.RequestLogger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
 

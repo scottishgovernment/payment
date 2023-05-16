@@ -1,11 +1,9 @@
 package scot.gov.payment.service.worldpay;
 
+import jakarta.ws.rs.core.Response;
 import org.junit.Test;
 import scot.gov.payment.service.*;
 import scot.gov.payment.service.worldpay.responseurls.PaymentUrlFormatter;
-
-import javax.ws.rs.client.*;
-import javax.ws.rs.core.Response;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -3,7 +3,12 @@ package scot.gov.payment;
 import com.codahale.metrics.MetricRegistry;
 import dagger.Module;
 import dagger.Provides;
-import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.ClientRequestFilter;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.UriBuilder;
+import org.jboss.resteasy.client.jaxrs.internal.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +23,6 @@ import scot.gov.payment.service.worldpay.responseurls.PaymentUrlFormatter;
 import scot.mygov.config.Configuration;
 
 import javax.inject.Singleton;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.UriBuilder;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 

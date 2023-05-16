@@ -1,17 +1,21 @@
 package scot.gov.payment.rest;
 
+import jakarta.ws.rs.container.AsyncResponse;
+import jakarta.ws.rs.core.Response;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import scot.gov.payment.rest.listeners.CompoundResourceListener;
-import scot.gov.payment.service.*;
-
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.core.Response;
+import scot.gov.payment.service.PaymentCallback;
+import scot.gov.payment.service.PaymentException;
+import scot.gov.payment.service.PaymentRequest;
+import scot.gov.payment.service.PaymentResult;
+import scot.gov.payment.service.PaymentResultBuilder;
+import scot.gov.payment.service.PaymentService;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PaymentResourceTest {
 

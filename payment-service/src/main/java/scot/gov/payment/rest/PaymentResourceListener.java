@@ -1,10 +1,10 @@
 package scot.gov.payment.rest;
 
+import jakarta.validation.ConstraintViolation;
 import scot.gov.payment.service.PaymentException;
 import scot.gov.payment.service.PaymentRequest;
 import scot.gov.payment.service.PaymentResult;
 
-import javax.validation.ConstraintViolation;
 import java.util.Set;
 
 /**

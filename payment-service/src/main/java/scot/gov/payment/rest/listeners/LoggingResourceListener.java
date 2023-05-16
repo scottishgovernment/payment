@@ -1,5 +1,6 @@
 package scot.gov.payment.rest.listeners;
 
+import jakarta.validation.ConstraintViolation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scot.gov.payment.rest.PaymentResource;
@@ -9,7 +10,6 @@ import scot.gov.payment.service.PaymentException;
 import scot.gov.payment.service.PaymentRequest;
 import scot.gov.payment.service.PaymentResult;
 
-import javax.validation.ConstraintViolation;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;

@@ -1,7 +1,7 @@
 package scot.gov.payment;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 
 public class PaymentConfiguration {
 
