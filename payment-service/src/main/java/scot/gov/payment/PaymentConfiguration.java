@@ -45,7 +45,7 @@ public class PaymentConfiguration {
 
         int connectTimeoutSeconds = 1;
 
-        int connectionTTLSeconds = 360;
+        int connectionTTLSeconds = 300;
 
         int readTimeoutSeconds = 10;
 
