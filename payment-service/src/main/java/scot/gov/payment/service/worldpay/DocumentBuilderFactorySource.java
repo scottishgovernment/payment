@@ -17,9 +17,14 @@ public class DocumentBuilderFactorySource {
     static DocumentBuilderFactory get() throws ParserConfigurationException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
-        // prevent external dtd from being fetched
-        documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        // see https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+        // the section "if you can't completely disable DTDs:"
+        documentBuilderFactory.setAttribute("http://xml.org/sax/features/external-general-entities", false);
+        documentBuilderFactory.setAttribute("http://xml.org/sax/features/external-parameter-entities", false);
         documentBuilderFactory.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        documentBuilderFactory.setXIncludeAware(false);
+        documentBuilderFactory.setExpandEntityReferences(false);
+        documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         return documentBuilderFactory;
     }
 }
