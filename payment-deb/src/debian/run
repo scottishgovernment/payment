@@ -4,5 +4,6 @@ JAVA=${JAVA_HOME:-/usr}/bin/java
 set -eu
 
 exec "$JAVA" \
+  -XX:+UseSerialGC \
   -Dlogback.configurationFile=/opt/payment/logback.xml \
   -jar /opt/payment/payment.jar
