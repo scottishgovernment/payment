@@ -15,10 +15,10 @@
   <name>Payment Service</name>
 
   <properties>
-    <undertow.version>2.3.5.Final</undertow.version>
+    <undertow.version>2.3.12.Final</undertow.version>
     <resteasy.version>6.2.4.Final</resteasy.version>
     <slf4j.version>2.0.7</slf4j.version>
-    <logback.version>1.4.7</logback.version>
+    <logback.version>1.4.12</logback.version>
     <sonar.exclusions>
       target/generated-sources/,
       src/main/java/scot/gov/payment/rest/listeners/LoggingResourceListener.java
