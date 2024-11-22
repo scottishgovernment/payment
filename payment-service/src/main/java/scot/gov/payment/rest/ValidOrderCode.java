@@ -17,7 +17,7 @@ import static java.lang.annotation.ElementType.PARAMETER;
 @Constraint(validatedBy = OrderCodeValidator.class)
 public @interface ValidOrderCode {
 
-    String message() default "Payment Reference cannot contains spaces, and must be less than 65 characters";
+    String message() default "Payment Reference cannot contains spaces or ampersand, and must be less than 65 characters";
 
     Class<?>[] groups() default {};
 
