@@ -33,4 +33,9 @@ public class OrderCodeValidatorTest {
     public void rejectsSpaces() {
         assertFalse(sut.isValid("order code", null));
     }
+
+    @Test
+    public void rejectsAmpersand() {
+        assertFalse(sut.isValid("order&code", null));
+    }
 }
