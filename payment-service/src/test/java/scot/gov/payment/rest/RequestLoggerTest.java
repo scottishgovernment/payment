@@ -89,19 +89,4 @@ public class RequestLoggerTest {
         return context;
     }
 
-//    @Override
-//    public void filter(ContainerRequestContext context) throws IOException {
-//        Instant start = Instant.now();
-//        context.setProperty(START_PROPERTY, start);
-//
-//        MDC.put("url.path", context.getUriInfo().getPath());
-//        MDC.put("http.request.method", context.getRequest().getMethod());
-//
-//        String query = context.getUriInfo().getRequestUri().getQuery();
-//        if (query != null) {
-//            MDC.put("url.query", query);
-//        }
-//    }
-
-
 }

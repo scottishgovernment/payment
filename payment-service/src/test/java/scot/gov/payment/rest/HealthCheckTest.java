@@ -40,7 +40,7 @@ public class HealthCheckTest {
     }
 
     @Test
-    public void unhealthyIfErrors() throws Exception {
+    public void unhealthyIfErrors() {
 
         // ARRANGE
         HealthCheck sut = new HealthCheck();

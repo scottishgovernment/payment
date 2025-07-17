@@ -55,7 +55,7 @@ public class WorldpayDocumentParserTest {
         InputStream in = WorldpayDocumentParserTest.class.getResourceAsStream("/truncatedResponse.xml");
 
         // ACT
-        PaymentResult result = sut.parseResponse(in);
+        sut.parseResponse(in);
 
         // ASSERT -- see expected exception
     }

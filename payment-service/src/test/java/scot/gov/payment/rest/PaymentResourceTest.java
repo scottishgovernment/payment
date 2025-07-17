@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 public class PaymentResourceTest {
 
     @Test
-    public void successfulPaymentReturns200Response() throws Exception {
+    public void successfulPaymentReturns200Response() {
 
         PaymentResource sut = new PaymentResource();
         PaymentResult result = success();
@@ -42,7 +42,7 @@ public class PaymentResourceTest {
     }
 
     @Test
-    public void usesDefaultSiteUrlIfHosrtHeaderIsNull() throws PaymentException{
+    public void usesDefaultSiteUrlIfHosrtHeaderIsNull() {
         PaymentResource sut = new PaymentResource();
         PaymentResult result = success();
         CapturingPaymentService service = new CapturingPaymentService(result);
@@ -63,7 +63,7 @@ public class PaymentResourceTest {
     }
 
     @Test
-    public void usesDefaultSiteUrlIfProtoHeaderIsNull() throws PaymentException{
+    public void usesDefaultSiteUrlIfProtoHeaderIsNull() {
         PaymentResource sut = new PaymentResource();
         PaymentResult result = success();
         CapturingPaymentService service = new CapturingPaymentService(result);
@@ -84,7 +84,7 @@ public class PaymentResourceTest {
     }
 
     @Test
-    public void unsucessfullPaymentReturns400Response() throws PaymentException{
+    public void unsucessfullPaymentReturns400Response() {
         // ARRANGE
         PaymentResource sut = new PaymentResource();
         PaymentResult result = fail();
@@ -107,7 +107,7 @@ public class PaymentResourceTest {
     }
 
     @Test
-    public void paymentExceptionReturns500Response() throws PaymentException {
+    public void paymentExceptionReturns500Response() {
         // ARRANGE
         PaymentResource sut = new PaymentResource();
         PaymentException exception = new PaymentException("arg");
@@ -127,7 +127,7 @@ public class PaymentResourceTest {
     }
 
     @Test
-    public void invalidPaymentExceptionReturns400Response() throws PaymentException {
+    public void invalidPaymentExceptionReturns400Response() {
         PaymentResource sut = new PaymentResource();
         PaymentResult result = success();
         CapturingPaymentService service = new CapturingPaymentService(result);
@@ -167,7 +167,7 @@ public class PaymentResourceTest {
         request.setEmailAddress("invalid");
         return request;
     }
-    class CapturingPaymentService implements PaymentService {
+    static class CapturingPaymentService implements PaymentService {
 
         PaymentResult result;
 
@@ -184,7 +184,7 @@ public class PaymentResourceTest {
         }
     }
 
-    class ExceptionPaymentService implements PaymentService {
+    static class ExceptionPaymentService implements PaymentService {
 
         PaymentException exception;
 

@@ -1,9 +1,7 @@
 package scot.gov.payment.rest.listeners;
 
 import com.codahale.metrics.MetricRegistry;
-import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 import scot.gov.payment.service.PaymentRequest;
 import scot.gov.payment.service.PaymentResultBuilder;
 

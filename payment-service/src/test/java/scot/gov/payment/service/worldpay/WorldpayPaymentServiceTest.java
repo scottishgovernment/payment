@@ -5,7 +5,6 @@ import org.junit.Test;
 import scot.gov.payment.service.*;
 import scot.gov.payment.service.worldpay.responseurls.PaymentUrlFormatter;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import static org.junit.Assert.*;
@@ -40,7 +39,7 @@ public class WorldpayPaymentServiceTest {
     }
 
     @Test
-    public void successResponseFromWorldHandledCorrectly() throws Exception {
+    public void successResponseFromWorldHandledCorrectly() {
         // ARRANGE
         WorldpayPaymentService sut = new WorldpayPaymentService();
         PaymentRequest paymentRequest = new PaymentRequest();
@@ -65,7 +64,7 @@ public class WorldpayPaymentServiceTest {
     }
 
     @Test
-    public void duplicateOrderResponseFromWorldHandledCorrectly() throws Exception {
+    public void duplicateOrderResponseFromWorldHandledCorrectly() {
         // ARRANGE
         WorldpayPaymentService sut = new WorldpayPaymentService();
         PaymentRequest paymentRequest = new PaymentRequest();
@@ -121,7 +120,8 @@ public class WorldpayPaymentServiceTest {
         PaymentRequest paymentRequest = new PaymentRequest();
         Response response = response(200, xmlFixture("/successResponse.xml"));
         sut.worldpayDocumentParser = mock(WorldpayDocumentParser.class);
-        when(sut.worldpayDocumentParser.parseResponse(any())).thenThrow(new PaymentException("arg"));
+        PaymentException paymentException = new PaymentException("arg");
+        when(sut.worldpayDocumentParser.parseResponse(any())).thenThrow(paymentException);
         sut.worldpayDocumentBuilder = mock(WorldpayDocumentBuilder.class);
         sut.paymentUrlFormatter = appendingUrlFormatter();
 
@@ -134,6 +134,8 @@ public class WorldpayPaymentServiceTest {
 
             @Override
             public void onPaymentException(PaymentRequest request, PaymentException exception) {
+                assertEquals(paymentRequest, request);
+                assertEquals(paymentException, exception);
             }
         });
     }
@@ -145,7 +147,7 @@ public class WorldpayPaymentServiceTest {
         return response;
     }
 
-    InputStream xmlFixture(String name) throws IOException {
+    InputStream xmlFixture(String name) {
         return WorldpayPaymentServiceTest.class.getResourceAsStream(name);
     }
 
