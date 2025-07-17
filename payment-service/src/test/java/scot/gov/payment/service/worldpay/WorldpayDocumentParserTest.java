@@ -3,7 +3,6 @@ package scot.gov.payment.service.worldpay;
 import org.junit.Test;
 import scot.gov.payment.service.PaymentException;
 import scot.gov.payment.service.PaymentResult;
-import scot.gov.payment.service.worldpay.responseurls.PaymentUrlFormatter;
 
 import java.io.InputStream;
 
